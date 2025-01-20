@@ -1,0 +1,98 @@
+.userInfo {
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  color: #c3a97e;
+  font-weight: 600;
+}
+.input {
+  color: #d9c39f;
+}
+.avatarContainer {
+  width: 250px;
+  height: 250px;
+  position: relative;
+  top: 75px;
+}
+.avatar {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+  object-fit: contain;
+  border-radius: 1000px;
+  border: 10px solid white;
+}
+.avatarImg {
+  height: 100%;
+}
+.avatar:hover {
+  cursor: pointer;
+}
+.pmainContainer {
+  width: 50%;
+  height: 1000px;
+  margin: 0 auto 150px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: "Manrope", sans-serif;
+  z-index: 5;
+  position: relative;
+}
+.pformContainer {
+  width: 80%;
+  height: 70%;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+  padding: 50px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 50px #dfdfdb;
+}
+.label {
+  width: 100%;
+  font-weight: 600;
+  color: #638595;
+}
+.input {
+  width: 100%;
+  height: 50px;
+  box-shadow: 0px 0px 50px #eccb9d;
+  border-radius: 20px;
+  border: solid 1px #f1f0e8;
+  margin: 10px 0 30px;
+  padding: 5px 5px 5px 17px;
+  font-size: 15.5px;
+}
+.input::placeholder {
+  color: #cabaa1;
+}
+.formButton {
+  width: 100%;
+  height: 55px;
+  background-color: #d9c39f;
+  font-weight: 600;
+  font-family: "Manrope", sans-serif;
+  border-radius: 50px;
+  border: solid 2px #d9c39f;
+  color: white;
+  font-size: 16px;
+  transition: 250ms ease-in-out;
+}
+.formButton:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 50px #e3c189;
+}
+.underFormText {
+  font-weight: 600;
+  color: #638595;
+}
+.formLink {
+  font-weight: 600;
+  font-size: 16px;
+  color: #d9c39f;
+}

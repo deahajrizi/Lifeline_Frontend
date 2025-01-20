@@ -1,0 +1,14 @@
+.progressBar {
+  width: 1%;
+}
+.progressContainer {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+.progressFill {
+  width: 100%;
+  height: 0%;
+  background-color: white;
+  box-shadow: 0px 0px 50px #dd9d2e;
+}

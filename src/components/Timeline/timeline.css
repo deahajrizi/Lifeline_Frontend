@@ -1,0 +1,14 @@
+.timelineContainer{
+    width: 90%;
+    margin: 100px auto 170px;
+    height: 800px;
+    position: relative;
+    z-index: 2;;
+    display: flex;
+    justify-content: space-evenly;
+}
+.leftMemoryContainer, .rightMemoryContainer{
+    width: 450px;
+  ;
+}
+
