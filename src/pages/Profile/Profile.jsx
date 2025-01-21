@@ -1,16 +1,31 @@
 import "./profile.css";
-import avatar from "../../assets/avatar.jpeg";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import { Link } from "react-router-dom";
+import EditAvatar from "../../components/EditAvatar/EditAvatar";
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [avatar, setAvatar] = useState(null)
   const [username, setUsername] = useState("JaneDoe123");
   const [firstName, setFirstName] = useState("Jane");
   const [lastName, setLastName] = useState("Doe");
   const [email, setEmail] = useState("JaneDoe@gmail.com");
 
+  const editorRef = useRef(null) // Ref for the AvatarEditor in EditAvatar
+  
+  const handleSaveProfile = () => {
+    if (editorRef.current){
+      //Get the edited avatar from AvatarEditor
+      const editedAvatar = editorRef.current.getImageScaledToCanvas().toDataURL()
+      setAvatar(editedAvatar) //Save the edited avatar to state
+    }
+    setIsEditing(!isEditing)
+  }
+  const handleEditClick = () => {
+    setIsEditing(true)
+  }
+  
   return (
     <>
       <Header
@@ -24,19 +39,18 @@ export default function Profile() {
 
       <div className="pmainContainer">
         <div className="avatarContainer">
-          <div className="avatar">
-            <img
-              src={avatar}
-              className="avatarImg"
-              alt="User's profile picture"
-            ></img>
-          </div>
+          <EditAvatar
+            avatar={avatar} //Pass current avatar
+            editorRef={editorRef} //Pass ref to access AvatarEditor
+            isEditing={isEditing}
+          />
         </div>
         <form
           className="pformContainer"
           onSubmit={(e) => {
             e.preventDefault();
-            setIsEditing(!isEditing);
+            handleSaveProfile();//Save profile and avatar together
+          
           }}
         >
           <label className="label" for="username">
@@ -127,10 +141,15 @@ export default function Profile() {
             type="password"
             placeholder="••••••••••••••••"
           ></input> --> */}
-          <button className="formButton" type="submit">
-            {isEditing ? "Save " : "Edit "}
-            profile
-          </button>
+          {isEditing ? (
+            <button className="formButton" type="submit">
+              Save Profile
+            </button>
+          ) : (
+            <button className="formButton" type="submit">
+              Edit Profile
+            </button>
+          )}
         </form>
         <p className="underFormText">
           Already have an account? Login{" "}

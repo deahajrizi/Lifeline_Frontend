@@ -14,15 +14,6 @@
   position: relative;
   top: 75px;
 }
-.avatar {
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  overflow: hidden;
-  object-fit: contain;
-  border-radius: 1000px;
-  border: 10px solid white;
-}
 .avatarImg {
   height: 100%;
 }
