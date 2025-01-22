@@ -12,6 +12,7 @@ export default function Timeline() {
 
   return (
     <>
+ 
       <div className="timelineContainer">
         {showDetails && <MemoryDetails setShowDetails={setShowDetails} />}
         <div className="leftMemoryContainer">

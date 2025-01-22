@@ -43,8 +43,13 @@
     font-weight: 800;
     margin-bottom: 10px;
 }
+.closeModal{
+    transition: 250ms ease-in-out;
+
+}
 .closeModal:hover{
     cursor: pointer;
+    transform: scale(1.1);
 }
 .memoryAuthor{
     width: 100%;
