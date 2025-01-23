@@ -1,9 +1,43 @@
 import "./login.css";
 
 import Header from "../../components/Header/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
+import { useUserStore } from "../../stores/userStore";
+import { useEffect, useState } from "react";
+import { Spinner } from "@material-tailwind/react";
 
 export default function Login() {
+      const [email, setEmail] = useState("");
+      const [password, setPassword] = useState("");
+
+      const { user, error, userLoading, login, success } = useUserStore();
+      const { setCredentials, userInfo } = useAuthStore();
+
+      const navigate = useNavigate();
+
+      useEffect(() => {
+        if (success) {
+          setCredentials({ user });
+          navigate("/");
+        }
+      }, [navigate, success]);
+
+      useEffect(() => {
+        if (userInfo) {
+          navigate("/");
+        }
+      }, [userInfo]);
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          await login({ email, password });
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
   return (
     <>
       <Header
@@ -14,39 +48,48 @@ export default function Login() {
         headerHeight="280px"
         headerTitleMargin="150px auto 0"
       />
+      {error && <h3>{error}</h3>}
 
-      <div className="mainContainer">
-        <form className="formContainer">
-          <label className="label" for="email">
-            Email
-          </label>
-          <input
-            className="input"
-            name="email"
-            type="email"
-            placeholder="JaneDoe@gmail.com"
-          ></input>
-          <label for="password" className="label">
-            Password
-          </label>
-          <input
-            className="input"
-            name="password"
-            type="password"
-            placeholder="••••••••••••••••"
-          ></input>
-          <button className="formButton" type="submit">
-            Login
-          </button>
-        </form>
-        <p className="underFormText">
-          Don't have an account? Register{" "}
-          <Link className="formLink" to="/register">
-            here
-          </Link>
-          .
-        </p>
-      </div>
+      {userLoading ? (
+        <Spinner className="h-12 w-12" color="purple" />
+      ) : (
+        <div className="mainContainer">
+          <form className="formContainer">
+            <label className="label" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="input"
+              name="email"
+              type="email"
+              value={email}
+              placeholder="JaneDoe@gmail.com"
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
+            <label htmlFor="password" className="label">
+              Password
+            </label>
+            <input
+              className="input"
+              name="password"
+              type="password"
+              value={password}
+              placeholder="••••••••••••••••"
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+            <button className="formButton" type="submit" onClick={handleSubmit}>
+              Login
+            </button>
+          </form>
+          <p className="underFormText">
+            Don't have an account? Register{" "}
+            <Link className="formLink" to="/register">
+              here
+            </Link>
+            .
+          </p>
+        </div>
+      )}
     </>
   );
 }

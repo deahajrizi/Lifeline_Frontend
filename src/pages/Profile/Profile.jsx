@@ -1,31 +1,50 @@
 import "./profile.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import { Link } from "react-router-dom";
 import EditAvatar from "../../components/EditAvatar/EditAvatar";
+import { useUserStore } from "../../stores/userStore";
+import { useAuthStore } from "../../stores/authStore";
+
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [avatar, setAvatar] = useState(null)
-  const [username, setUsername] = useState("JaneDoe123");
-  const [firstName, setFirstName] = useState("Jane");
-  const [lastName, setLastName] = useState("Doe");
-  const [email, setEmail] = useState("JaneDoe@gmail.com");
+  const [avatar, setAvatar] = useState(null);
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
 
-  const editorRef = useRef(null) // Ref for the AvatarEditor in EditAvatar
-  
-  const handleSaveProfile = () => {
-    if (editorRef.current){
-      //Get the edited avatar from AvatarEditor
-      const editedAvatar = editorRef.current.getImageScaledToCanvas().toDataURL()
-      setAvatar(editedAvatar) //Save the edited avatar to state
+  // Get user data and the function to fetch profile
+  const { user, userLoading, error, getUserProfile } = useUserStore();
+  const { userInfo } = useAuthStore(); // Assuming userInfo contains logged-in user's data
+
+  // Get the current user's ID from the auth store (if available)
+  const userId = userInfo?._id;
+
+  // Fetch user profile when the component mounts
+  useEffect(() => {
+    if (userId) {
+      getUserProfile(userId); // Fetch profile using the current user's ID
     }
-    setIsEditing(!isEditing)
-  }
+  }, [userId, getUserProfile]);
+
+  const editorRef = useRef(null); // Ref for the AvatarEditor in EditAvatar
+
+  const handleSaveProfile = () => {
+    if (editorRef.current) {
+      //Get the edited avatar from AvatarEditor
+      const editedAvatar = editorRef.current
+        .getImageScaledToCanvas()
+        .toDataURL();
+      setAvatar(editedAvatar); //Save the edited avatar to state
+    }
+    setIsEditing(!isEditing);
+  };
   const handleEditClick = () => {
-    setIsEditing(true)
-  }
-  
+    setIsEditing(true);
+  };
+
   return (
     <>
       <Header
@@ -49,11 +68,10 @@ export default function Profile() {
           className="pformContainer"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSaveProfile();//Save profile and avatar together
-          
+            handleSaveProfile(); //Save profile and avatar together
           }}
         >
-          <label className="label" for="username">
+          <label className="label" htmlFor="username">
             Username
           </label>
           {isEditing ? (
@@ -72,7 +90,7 @@ export default function Profile() {
             </div>
           )}
 
-          <label className="label" for="fname">
+          <label className="label" htmlFor="fname">
             First Name
           </label>
           {isEditing ? (
@@ -92,7 +110,7 @@ export default function Profile() {
             </div>
           )}
 
-          <label className="label " for="lname">
+          <label className="label " htmlFor="lname">
             Last Name
           </label>
           {isEditing ? (
@@ -112,7 +130,7 @@ export default function Profile() {
             </div>
           )}
 
-          <label className="label" for="email">
+          <label className="label" htmlFor="email">
             Email
           </label>
           {isEditing ? (
@@ -132,7 +150,7 @@ export default function Profile() {
             </div>
           )}
 
-          {/* <label for="password" className="label">
+          {/* <label htmlFor="password" className="label">
             Password
           </label>
           <input

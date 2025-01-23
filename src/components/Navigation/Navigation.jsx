@@ -1,9 +1,26 @@
 import "./navigation.css"
 import logo from "../../assets/Lifeline_Logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuthStore } from "../../stores/authStore";
+import { useUserStore } from "../../stores/userStore";
 
 export default function Navigation() {
+
+
+    const {userInfo, logout} = useAuthStore()
+    const {userLogout} = useUserStore()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        try {
+            await userLogout()
+            logout()
+            navigate('/login')
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
   // Nav color change on scroll
   const [bgColor, setBgColor] = useState(false)
@@ -21,13 +38,24 @@ export default function Navigation() {
         <div className="logoContainer">
             <img className="logo" src={logo}></img>
         </div>
+          {userInfo ? (
+
         <div className="linkContainer">
             <Link to="/">Home</Link>
-            <button className="navButton">
+              <Link to="/profile">Profile</Link>
+              <button className="navButton" onClick={handleLogout} >Logout</button>
+        </div>
+              
+            ) : ( 
+            <div className="linkContainer">
+            <Link to="/">Home</Link>
+               <button className="navButton">
                 <Link to="/login" className="coloredLink" >Register / Login</Link>
             </button>
-            
         </div>
+
+            )}
+           
     </nav>
   );
    
