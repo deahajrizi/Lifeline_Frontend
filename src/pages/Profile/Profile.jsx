@@ -1,13 +1,16 @@
 import "./profile.css";
 import { useEffect, useRef, useState } from "react";
 import Header from "../../components/Header/Header";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import EditAvatar from "../../components/EditAvatar/EditAvatar";
 import { useUserStore } from "../../stores/userStore";
-import { useAuthStore } from "../../stores/authStore";
 
 
 export default function Profile() {
+
+   const { getUserProfile } = useUserStore();
+   const param = useParams()._id;
+
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState("");
@@ -15,25 +18,16 @@ export default function Profile() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
 
-  // Get user data and the function to fetch profile
-  const { user, userLoading, error, getUserProfile } = useUserStore();
-  const { userInfo } = useAuthStore(); // Assuming userInfo contains logged-in user's data
-
-  // Get the current user's ID from the auth store (if available)
-  const userId = userInfo?._id;
-
-  // Fetch user profile when the component mounts
   useEffect(() => {
-    if (userId) {
-      getUserProfile(userId); // Fetch profile using the current user's ID
-    }
-  }, [userId, getUserProfile]);
+      getUserProfile(param); 
+  }, []);
 
-  const editorRef = useRef(null); // Ref for the AvatarEditor in EditAvatar
+ 
+
+  const editorRef = useRef(null); // Ref for AvatarEditor in EditAvatar
 
   const handleSaveProfile = () => {
     if (editorRef.current) {
-      //Get the edited avatar from AvatarEditor
       const editedAvatar = editorRef.current
         .getImageScaledToCanvas()
         .toDataURL();

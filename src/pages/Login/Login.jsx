@@ -20,6 +20,7 @@ export default function Login() {
         if (success) {
           setCredentials({ user });
           navigate("/");
+          console.log("User logged in")
         }
       }, [navigate, success]);
 

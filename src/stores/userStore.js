@@ -29,6 +29,7 @@ export const useUserStore = create((set) => ({
       set({ error: error.message, userLoading: false });
     }
   },
+
   login: async (data) => {
     set({ userLoading: true, error: null });
     try {
@@ -41,6 +42,7 @@ export const useUserStore = create((set) => ({
       set({ error: error.message, userLoading: false });
     }
   },
+
   userLogout: async () => {
     set({ userLoading: true, error: null });
     try {
@@ -52,11 +54,12 @@ export const useUserStore = create((set) => ({
       set({ error: error.message, userLoading: false });
     }
   },
-  getUserProfile: async (id) => {
+
+  getUserProfile: async (_id) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/user/profile/${id}`
+        `http://localhost:8080/api/user/profile/${_id}`
       );
       set(() => ({
         getUserProfile: response.data,

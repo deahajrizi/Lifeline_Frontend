@@ -7,6 +7,7 @@ import { useUserStore } from "../stores/userStore";
 export default function Home() {
 
   const {userInfo} = useAuthStore()
+  
 
 
   return (
