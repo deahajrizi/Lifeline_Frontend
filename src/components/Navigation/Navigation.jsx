@@ -34,28 +34,30 @@ export default function Navigation() {
   window.addEventListener('scroll', changeBgColor)
 
   return (
-    <nav className={bgColor ? 'nav navScrolled' : 'nav' }>
-        <div className="logoContainer">
-            <img className="logo" src={logo}></img>
-        </div>
-          {userInfo ? (
-
+    <nav className={bgColor ? "nav navScrolled" : "nav"}>
+      <div className="logoContainer">
+        <Link to={"/"}>
+          <img className="logo" src={logo}></img>
+        </Link>
+      </div>
+      {userInfo ? (
         <div className="linkContainer">
-            <Link to="/">Home</Link>
-              <Link to="/profile">Profile</Link>
-              <button className="navButton" onClick={handleLogout} >Logout</button>
+          <Link to="/">Home</Link>
+          <Link to="/profile">Profile</Link>
+          <button className="navButton" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
-              
-            ) : ( 
-            <div className="linkContainer">
-            <Link to="/">Home</Link>
-               <button className="navButton">
-                <Link to="/login" className="coloredLink" >Register / Login</Link>
-            </button>
+      ) : (
+        <div className="linkContainer">
+          <Link to="/">Home</Link>
+          <button className="navButton">
+            <Link to="/login" className="coloredLink">
+              Register / Login
+            </Link>
+          </button>
         </div>
-
-            )}
-           
+      )}
     </nav>
   );
    
