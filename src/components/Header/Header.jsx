@@ -17,7 +17,7 @@ export default function Header({ title, subtitle, showLogo = true, showButton = 
           </div>
         )}
       </div>
-      {showButton && <HeaderButton />}
+      {showButton && <HeaderButton buttonText={"Create your own Lifeline"} />}
       <div className="imgContainer">
         <img className="bgImg" src={bgImg} alt="Background"></img>
       </div>

@@ -1,9 +1,9 @@
 import "./headerButton.css";
 
-export default function HeaderButton() {
+export default function HeaderButton({buttonText}) {
   return (
     <div className="headerButtonContainer">
-      <button className="headerButton">Create your own Lifeline</button>
+      <button className="headerButton">{buttonText}</button>
     </div>
   );
 }

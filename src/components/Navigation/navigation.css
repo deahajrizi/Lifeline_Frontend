@@ -12,7 +12,7 @@ nav {
   display: flex;
   position: sticky;
   top: 0;
-  z-index: 6;
+  z-index: 15;
   font-family: "Manrope", sans-serif;
   transition: background-color 250ms ease-in-out;
 }
