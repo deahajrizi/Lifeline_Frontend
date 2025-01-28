@@ -62,7 +62,7 @@ export const useUserStore = create((set) => ({
         `http://localhost:8080/api/user/profile/${_id}`
       );
       set(() => ({
-        getUserProfile: response.data,
+        user: response.data.user,
         loading: false,
         success: true,
       }));

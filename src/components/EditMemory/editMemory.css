@@ -132,7 +132,7 @@
     resize: none;
 }
 .createButton{
-     width: 100%;
+     width: 60%;
     height: 55px;
     margin: 0 10px;
     background-color: #D9C39F;
@@ -147,6 +147,22 @@
 .createButton:hover{
     cursor: pointer;
     box-shadow: 0px 0px 30px #d7c9b2;
+}
+.deleteButton{
+    width: 30%;
+    height: 55px;
+    background-color: rgb(198, 116, 116);
+    font-weight: 600;
+    font-family: "Manrope", sans-serif;
+    border-radius: 50px;
+    border: solid 2px rgb(198, 116, 116);
+    color: white;
+    font-size: 16px;
+    transition: 250ms ease-in-out;
+}
+.deleteButton:hover{
+     cursor: pointer;
+    box-shadow: 0px 0px 30px #d7b8b2;
 }
 
 
