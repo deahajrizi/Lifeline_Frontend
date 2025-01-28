@@ -59,8 +59,10 @@ export const useUserStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/user/profile/${_id}`
+        `http://localhost:8080/api/user/profile/${_id}`,
+        { withCredentials: true }
       );
+      console.log(response, "Response")
       set(() => ({
         user: response.data.user,
         loading: false,

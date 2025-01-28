@@ -3,7 +3,6 @@ import Header from "../components/Header/Header";
 import Timeline from "../components/Timeline/Timeline";
 import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
-import CreateMemory from "../components/CreateMemory/CreateMemory";
 
 
 export default function Home() {
@@ -12,18 +11,20 @@ export default function Home() {
   const {getUserProfile, user} = useUserStore()
   
    useEffect(() => {
-     if (userInfo && userInfo._id) {
-       getUserProfile(userInfo._id);
+    console.log("userInfo:",userInfo, "userInfoID:", userInfo._id)
+
+     if (userInfo && userInfo.user._id) {
+      console.log("Hello")
+       getUserProfile(userInfo.user._id);
      }
    }, [userInfo, user]);
 
 
   return (
     <div>
-      <CreateMemory />
       {userInfo ? (
         <Header
-          title={`Welcome back ${user?.username || 'inconnu'}`}
+          title={`Welcome back ${user?.username || "hello"}`}
           subtitle="Reminisce on your favorite memories and share them with your loved ones."
           showLogo={false}
           showButton={false}
