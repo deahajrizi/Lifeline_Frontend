@@ -4,12 +4,12 @@ import Header from "../../components/Header/Header";
 import { Link, useParams } from "react-router-dom";
 import EditAvatar from "../../components/EditAvatar/EditAvatar";
 import { useUserStore } from "../../stores/userStore";
+import { useAuthStore } from '../../stores/authStore.js'
 
 
 export default function Profile() {
-
+  const {userInfo} = useAuthStore()
    const { getUserProfile } = useUserStore();
-   const param = useParams()._id;
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -19,10 +19,10 @@ export default function Profile() {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-      getUserProfile(param); 
+      getUserProfile(userInfo.user._id);
   }, []);
 
- 
+
 
   const editorRef = useRef(null); // Ref for AvatarEditor in EditAvatar
 

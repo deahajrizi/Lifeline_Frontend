@@ -5,22 +5,26 @@ import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
 
 
-
 export default function Home() {
-  const {getUserProfile, user} = useUserStore()
-  const {userInfo} = useAuthStore()
 
-  
-  console.log(userInfo)
-  useEffect(() => {
-    getUserProfile(userInfo.user._id)
-    console.log("User",user)
-  }, [])
+  const {userInfo} = useAuthStore()
+  const {getUserProfile, user} = useUserStore()
+   useEffect(() => {
+    console.log("userInfo:",userInfo, "userInfoID:", userInfo?._id)
+    console.log(document.cookie); // Check if JWT is in the cookies
+
+     if (userInfo && userInfo._id) {
+      console.log("Hello")
+       getUserProfile(userInfo._id);
+     }
+   }, [userInfo, user]);
+
+
   return (
     <div>
       {userInfo ? (
         <Header
-          title={`Welcome back ${userInfo.user.username}`}
+          title={`Welcome back ${user.username}`}
           subtitle="Reminisce on your favorite memories and share them with your loved ones."
           showLogo={false}
           showButton={false}

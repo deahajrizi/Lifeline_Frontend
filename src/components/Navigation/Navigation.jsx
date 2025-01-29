@@ -12,19 +12,12 @@ export default function Navigation() {
     const {userLogout} = useUserStore()
     const navigate = useNavigate()
 
-    useEffect(() => {
-      if(!userInfo){
-        navigate('/login')
-      }
-        
-    }, [userInfo])
+    
     const handleLogout = async () => {
         try {
             await userLogout()
             logout()
-            console.log('before')
             navigate('/login')
-            console.log("after ")
         } catch (err) {
             console.log(err)
         }

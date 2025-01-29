@@ -10,8 +10,6 @@ export const useAuthStore = create((set) => ({
     logout: () => {
         set(() => ({userInfo: null}))
         localStorage.removeItem('userInfo')
-        console.log('logout')
-        window.location.href = "/login";
     }
 
 }))

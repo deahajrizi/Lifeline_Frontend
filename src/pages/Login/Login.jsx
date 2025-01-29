@@ -19,23 +19,19 @@ export default function Login() {
       useEffect(() => {
         if (success) {
           setCredentials({ user });
-          navigate(`/${user._id}`);
+          navigate('/');
           console.log("User logged in")
         }
       }, [navigate, success, user]);
 
-      useEffect(() => {
-        if (userInfo) {
-          navigate("/");
-        }
-      }, [userInfo]);
+      
 
       const handleSubmit = async (e) => {
         e.preventDefault();
         await login({ email, password });
         if (user && user._id) {
           setCredentials({ user });
-          navigate(`/${user._id}`);
+          navigate('/');
         }
       };
 
