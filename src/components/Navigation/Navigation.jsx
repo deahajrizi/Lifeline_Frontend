@@ -1,7 +1,7 @@
 import "./navigation.css"
 import logo from "../../assets/Lifeline_Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../../stores/authStore";
 import { useUserStore } from "../../stores/userStore";
 
@@ -12,15 +12,24 @@ export default function Navigation() {
     const {userLogout} = useUserStore()
     const navigate = useNavigate()
 
+    useEffect(() => {
+      if(!userInfo){
+        navigate('/login')
+      }
+        
+    }, [userInfo])
     const handleLogout = async () => {
         try {
             await userLogout()
             logout()
+            console.log('before')
             navigate('/login')
+            console.log("after ")
         } catch (err) {
             console.log(err)
         }
     }
+
 
   // Nav color change on scroll
   const [bgColor, setBgColor] = useState(false)

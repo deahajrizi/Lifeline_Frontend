@@ -5,26 +5,22 @@ import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
 
 
+
 export default function Home() {
-
-  const {userInfo} = useAuthStore()
   const {getUserProfile, user} = useUserStore()
+  const {userInfo} = useAuthStore()
+
   
-   useEffect(() => {
-    console.log("userInfo:",userInfo, "userInfoID:", userInfo._id)
-
-     if (userInfo && userInfo.user._id) {
-      console.log("Hello")
-       getUserProfile(userInfo.user._id);
-     }
-   }, [userInfo, user]);
-
-
+  console.log(userInfo)
+  useEffect(() => {
+    getUserProfile(userInfo.user._id)
+    console.log("User",user)
+  }, [])
   return (
     <div>
       {userInfo ? (
         <Header
-          title={`Welcome back ${user?.username || "hello"}`}
+          title={`Welcome back ${userInfo.user.username}`}
           subtitle="Reminisce on your favorite memories and share them with your loved ones."
           showLogo={false}
           showButton={false}

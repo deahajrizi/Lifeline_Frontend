@@ -64,11 +64,13 @@ export const useUserStore = create((set) => ({
       );
       console.log(response, "Response")
       set(() => ({
-        user: response.data.user,
+        user: response.data,
         loading: false,
         success: true,
       }));
     } catch (error) {
+    console.log('getUserProfile')
+
       set({ error: error.message, loading: false });
     }
   },
