@@ -2,7 +2,7 @@ import { IoMdClose } from "react-icons/io";
 import "./createMemory.css";
 import { useState } from "react";
 
-export default function CreateMemory() {
+export default function CreateMemory({onClose}) {
    const [mediaPreview, setMediaPreview] = useState(null);
    const [mediaType, setMediaType] = useState(""); 
 
@@ -26,8 +26,8 @@ export default function CreateMemory() {
     <div className="backgroundBlur">
       <div className="createContainer">
         <div className="closeFlex">
-          <div className="createCloseModal">
-            <IoMdClose className="createClose" />
+          <div className="createCloseModal" >
+            <IoMdClose className="createClose" onClick={onClose} />
           </div>
         </div>
 

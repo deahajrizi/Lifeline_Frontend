@@ -8,8 +8,8 @@ import { useAuthStore } from '../../stores/authStore.js'
 
 
 export default function Profile() {
-  const {userInfo} = useAuthStore()
-   const { getUserProfile } = useUserStore();
+  const {userInfo} = useAuthStore();
+   const { getUserProfile, user } = useUserStore();
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -19,10 +19,18 @@ export default function Profile() {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-      getUserProfile(userInfo.user._id);
-  }, []);
-
-
+     if (userInfo && userInfo._id) {
+       getUserProfile(userInfo._id)
+     }
+   }, [userInfo, user]);
+   useEffect(() => {
+    if (user){
+      setUsername(user.username || "no username"),
+      setFirstName(user.first_name),
+      setLastName(user.last_name),
+      setEmail(user.email)
+    }
+   }, [user])
 
   const editorRef = useRef(null); // Ref for AvatarEditor in EditAvatar
 
@@ -45,26 +53,29 @@ export default function Profile() {
         title="Profile"
         subtitle="Edit and personalize your profile!"
         showLogo={false}
-        showButton={false}
+        showButton={true}
         headerHeight="280px"
         headerTitleMargin="150px auto 0"
       />
 
       <div className="pmainContainer">
         <div className="avatarContainer">
-          <EditAvatar
-            avatar={avatar} //Pass current avatar
-            editorRef={editorRef} //Pass ref to access AvatarEditor
-            isEditing={isEditing}
-          />
-        </div>
+           <div className="avatar">
+                    <img
+                      src=""
+                      className="avatarImg"
+                      alt="User Avatar"
+                    >
+                    </img>
+                </div>
+          </div>
         <form
           className="pformContainer"
           onSubmit={(e) => {
             e.preventDefault();
             handleSaveProfile(); //Save profile and avatar together
           }}
-        >
+          >
           <label className="label" htmlFor="username">
             Username
           </label>

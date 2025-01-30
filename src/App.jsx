@@ -11,7 +11,7 @@ import Redirect from "./pages/Redirect/Redirect";
 
 
 function App() {
-   const { userInfo } = useAuthStore();
+   
 
   return (
     <BrowserRouter>

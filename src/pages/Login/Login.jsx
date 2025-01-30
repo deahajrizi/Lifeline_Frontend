@@ -24,7 +24,11 @@ export default function Login() {
         }
       }, [navigate, success, user]);
 
-      
+      useEffect(() => {
+        if (userInfo) {
+          navigate("/");
+        }
+      }, [userInfo]);
 
       const handleSubmit = async (e) => {
         e.preventDefault();
