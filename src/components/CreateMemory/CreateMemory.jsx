@@ -69,7 +69,7 @@ export default function CreateMemory({onClose}) {
               )}
             </label>
 
-            <label className="createLabels" for="date">
+            <label className="createLabels" htmlFor="date">
               {" "}
               Date*
             </label>
@@ -83,7 +83,7 @@ export default function CreateMemory({onClose}) {
           </div>
 
           <div className="createRight">
-            <label className="createLabels" for="title">
+            <label className="createLabels" htmlFor="title">
               Title*
             </label>
             <input
@@ -93,7 +93,7 @@ export default function CreateMemory({onClose}) {
               required
             ></input>
 
-            <label className="createLabels" for="content" required>
+            <label className="createLabels" htmlFor="content" required>
               Description*
             </label>
             <textarea className="createContent" name="content"></textarea>

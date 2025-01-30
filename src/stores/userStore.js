@@ -61,7 +61,6 @@ export const useUserStore = create((set) => ({
 			`http://localhost:8080/api/user/profile/${_id}`,
 			{ withCredentials: true },
 		).then(response => {
-			console.log(response, 'Response')
 			set(() => ({
 				user: response.data.user,
 				loading: false,

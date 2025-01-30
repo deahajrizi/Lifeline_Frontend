@@ -14,8 +14,6 @@ export default function Home() {
      }
    }, [userInfo, user]);
 
-
-
   return (
     <div>
       {userInfo ? (

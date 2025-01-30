@@ -2,7 +2,6 @@ import "./profile.css";
 import { useEffect, useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import { Link, useParams } from "react-router-dom";
-import EditAvatar from "../../components/EditAvatar/EditAvatar";
 import { useUserStore } from "../../stores/userStore";
 import { useAuthStore } from '../../stores/authStore.js'
 
@@ -32,15 +31,9 @@ export default function Profile() {
     }
    }, [user])
 
-  const editorRef = useRef(null); // Ref for AvatarEditor in EditAvatar
-
   const handleSaveProfile = () => {
-    if (editorRef.current) {
-      const editedAvatar = editorRef.current
-        .getImageScaledToCanvas()
-        .toDataURL();
-      setAvatar(editedAvatar); //Save the edited avatar to state
-    }
+  
+    
     setIsEditing(!isEditing);
   };
   const handleEditClick = () => {
@@ -53,7 +46,7 @@ export default function Profile() {
         title="Profile"
         subtitle="Edit and personalize your profile!"
         showLogo={false}
-        showButton={true}
+        showButton={false}
         headerHeight="280px"
         headerTitleMargin="150px auto 0"
       />
@@ -73,7 +66,7 @@ export default function Profile() {
           className="pformContainer"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSaveProfile(); //Save profile and avatar together
+          
           }}
           >
           <label className="label" htmlFor="username">
