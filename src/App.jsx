@@ -6,13 +6,12 @@ import Home from "./pages/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/Profile/Profile";
-import { useAuthStore } from "./stores/authStore";
 import Redirect from "./pages/Redirect/Redirect";
 
 
-function App() {
-   
 
+function App() {
+  
   return (
     <BrowserRouter>
       <Navigation />

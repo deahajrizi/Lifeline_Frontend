@@ -10,10 +10,11 @@ export default function Home() {
   const {getUserProfile, user} = useUserStore()
    useEffect(() => {
      if (userInfo && userInfo._id) {
+      
        getUserProfile(userInfo._id);
      }
    }, [userInfo, user]);
-
+   console.log(userInfo)
   return (
     <div>
       {userInfo ? (

@@ -71,4 +71,47 @@ export const useUserStore = create((set) => ({
 
 		})
 	},
+
+	uploadAvatar: (_id, formData) => {
+		axios.put(
+			`http://localhost:8080/api/user/upload-avatar/${_id}`,
+			formData,
+			{ 
+			withCredentials: true,
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			} },
+		).then(response => {
+			set(() => ({
+				user: response.data.user,
+				loading: false,
+				success: true,
+			}))
+		}).catch(error => {
+			set({ error: error.message, loading: false })
+
+		})
+	},
+	editProfile: (userData) => {
+		axios.put(
+		  'http://localhost:8080/api/user/profile',
+		  userData,
+		  { withCredentials: true }
+		)
+		.then(response => {
+		  set(() => ({
+			user: response.data,
+			success: true,
+		  }));
+		   // Sync user info with authStore
+		   const { setCredentials } = useAuthStore.getState();
+		   setCredentials(response.data);  // Update userInfo in authStore
+		  console.log("Profile updated:", response.data);  // Debugging line
+		})
+		.catch(error => {
+		  set({ error: error.message });
+		  console.error("Error updating profile:", error);  // Debugging line
+		});
+	  }
+	  
 }))
