@@ -1,82 +1,92 @@
 import "./profile.css";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../stores/userStore";
-import { useAuthStore } from '../../stores/authStore.js'
-import defaultAvatar from '../../assets/default-avatar.png'
-
+import { useAuthStore } from "../../stores/authStore.js";
+import defaultAvatar from "../../assets/default-avatar.png";
 
 export default function Profile() {
-  const {userInfo} = useAuthStore();
-  const { getUserProfile, user, editProfile, uploadAvatar} = useUserStore();
+  const { userInfo } = useAuthStore();
+  const { getUserProfile, user, editProfile, uploadAvatar } = useUserStore();
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
 
-  
+  const navigate = useNavigate()
   useEffect(() => {
-    if (userInfo && userInfo._id) {
-      getUserProfile(userInfo._id);
-    } else if (user && user._id) {
-      getUserProfile(user._id);
+    if (!user && !userInfo) {
+      // If no user information is available, redirect to login page
+      navigate("/login");
+    } else {
+      // Proceed to get the user profile
+      if (userInfo && userInfo._id) {
+        getUserProfile(userInfo._id);
+      } else if (user && user._id) {
+        getUserProfile(user._id);
+      }
     }
-  }, [userInfo, user]);
-   useEffect(() => {
-    if (user){
+  }, [userInfo, user, getUserProfile]);
+  useEffect(() => {
+    if (user) {
       setUsername(user.username),
-      setFirstName(user.first_name),
-      setLastName(user.last_name),
-      setEmail(user.email)
-      setAvatar(user.avatar)
+        setFirstName(user.first_name),
+        setLastName(user.last_name),
+        setEmail(user.email);
+      setAvatar(user.avatar);
       setAvatarPreview(user.avatar || defaultAvatar); // Set initial avatar preview
     }
-   }, [user])
+  }, [user]);
 
   const handleEditClick = (e) => {
-    e.preventDefault()
-    setIsEditing(true)
-  }
+    e.preventDefault();
+    setIsEditing(true);
+  };
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     console.log(file); // Debug: Check if the file is selected correctly
 
     if (file) {
       setAvatar(file);
-  
       //temporary url to display it in the preview
-      const fileUrl = URL.createObjectURL(file)
-      setAvatarPreview(fileUrl)
-      
+      const fileUrl = URL.createObjectURL(file);
+      setAvatarPreview(fileUrl);
     }
   };
-  
-  const handleSaveProfile = (e) => {
-    e.preventDefault()
-   // if (!userInfo || !userInfo._id) {
-    //  console.error('userInfo is missing or undefined!');
-   //   return;
-   // }
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+
     const userData = {
       username: username,
       first_name: firstName,
       last_name: lastName,
-      email: email
-    }
-    editProfile(userData)
+      email: email,
+    };
 
-    if(avatar){
-      const formData = new FormData()
-      formData.append('avatar', avatar)
-      uploadAvatar(userInfo._id, formData)
-    }
+    try {
+      // Update user profile
+      await editProfile(userData);
 
-    setIsEditing(false);
+      // Upload avatar if it exists
+      if (avatar) {
+        const formData = new FormData();
+        formData.append("avatar", avatar);
+        await uploadAvatar(userInfo._id, formData);
+      }
+
+      // Fetch updated profile to reflect changes
+      await getUserProfile(userInfo._id);
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Profile update or avatar upload failed:", error);
+    }
   };
 
   return (
@@ -92,46 +102,45 @@ export default function Profile() {
 
       <div className="pmainContainer">
         <div className="avatarContainer">
-           <div className="avatar">
+          <div className="avatar">
             {isEditing ? (
-                  <>
-                  <input
-                    type="file"
-                    id="avatarInput"
-                    name="avatar"
-                    accept="image/jpeg, image/jpg, image/png, image/webp"
-                    className="avatarInput"
-                    onChange={handleAvatarChange}
-                  />
-                  <label className="avatarLabel" htmlFor="avatarInput">Click to change Avatar</label>
-                  {avatarPreview ? (
-                    <img
-                      src={avatarPreview}
-                      className="avatarImg"
-                      alt="Avatar Preview"
-                    />
-                  ) : (
-                    <img
-                      src={defaultAvatar}
-                      className="avatarImg"
-                      alt="Default Avatar"
-                    />
-                  )}
-                </>
-              ) : (
-                <img
-                  src={avatarPreview ? avatarPreview : defaultAvatar}
-                  className="avatarImg"
-                  alt="User Avatar"
+              <>
+                <input
+                  type="file"
+                  id="avatarInput"
+                  name="avatar"
+                  accept="image/jpeg, image/jpg, image/png, image/webp"
+                  className="avatarInput"
+                  onChange={handleAvatarChange}
                 />
-              )}
-            </div>
+                <label className="avatarLabel" htmlFor="avatarInput">
+                  Click to change Avatar
+                </label>
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    className="avatarImg"
+                    alt="Avatar Preview"
+                  />
+                ) : (
+                  <img
+                    src={defaultAvatar}
+                    className="avatarImg"
+                    alt="Default Avatar"
+                  />
+                )}
+              </>
+            ) : (
+              <img
+                src={avatar ? avatar : defaultAvatar}
+                className="avatarImg"
+                alt="User Avatar"
+              />
+            )}
           </div>
+        </div>
 
-        <form
-          className="pformContainer"
-          onSubmit={handleSaveProfile}
-          >
+        <form className="pformContainer" onSubmit={handleSaveProfile}>
           <label className="label" htmlFor="username">
             Username
           </label>
@@ -225,7 +234,11 @@ export default function Profile() {
               Save Profile
             </button>
           ) : (
-            <button className="formButton" type="submit" onClick={handleEditClick}>
+            <button
+              className="formButton"
+              type="submit"
+              onClick={handleEditClick}
+            >
               Edit Profile
             </button>
           )}

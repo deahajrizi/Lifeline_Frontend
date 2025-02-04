@@ -14,13 +14,14 @@ export default function Register() {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
 
-   const { userLoading, register, error, success } = useUserStore();
-   const { userInfo } = useAuthStore();
+   const { userLoading, user, register, error, success } = useUserStore();
+   const { setCredentials, userInfo } = useAuthStore();
 
    const navigate = useNavigate();
 
    useEffect(() => {
      if (success) {
+       setCredentials({ user });
        setUsername("");
        setFirstName("");
        setLastName("");
@@ -28,7 +29,7 @@ export default function Register() {
        setPassword("");
        navigate("/");
      }
-   }, [success]);
+   }, [navigate, success, user]);
 
    useEffect(() => {
      if (userInfo) {
@@ -44,7 +45,12 @@ export default function Register() {
          first_name: firstName, 
          last_name: lastName, 
          email, 
-         password });
+         password 
+        });
+        if (user && user._id) {
+          setCredentials({ user });
+          navigate("/");
+        }
      } catch (e) {
        console.log(e);
      }

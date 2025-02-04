@@ -8,36 +8,36 @@ import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 
 export default function Login() {
-      const [email, setEmail] = useState("");
-      const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-      const { user, error, userLoading, login, success } = useUserStore();
-      const { setCredentials, userInfo } = useAuthStore();
+  const { user, error, userLoading, login, success } = useUserStore();
+  const { setCredentials, userInfo } = useAuthStore();
 
-      const navigate = useNavigate();
+  const navigate = useNavigate();
 
-      useEffect(() => {
-        if (success) {
-          setCredentials({ user });
-          navigate('/');
-          console.log("User logged in")
-        }
-      }, [navigate, success, user]);
+  useEffect(() => {
+    if (success) {
+      setCredentials({ user });
+      navigate("/");
+      console.log("User logged in");
+    }
+  }, [navigate, success, user]);
 
-      useEffect(() => {
-        if (userInfo) {
-          navigate("/");
-        }
-      }, [userInfo]);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [userInfo]);
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        await login({ email, password });
-        if (user && user._id) {
-          setCredentials({ user });
-          navigate('/');
-        }
-      };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login({ email, password });
+    if (user && user._id) {
+      setCredentials({ user });
+      navigate("/");
+    }
+  };
 
   return (
     <>
