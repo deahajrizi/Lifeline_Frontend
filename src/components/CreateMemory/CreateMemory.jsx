@@ -1,32 +1,54 @@
 import { IoMdClose } from "react-icons/io";
 import "./createMemory.css";
 import { useState } from "react";
+import { usePostStore } from "../../stores/postStore";
 
 export default function CreateMemory({onClose}) {
-   const [mediaPreview, setMediaPreview] = useState(null);
-   const [mediaType, setMediaType] = useState(""); 
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaType, setMediaType] = useState("");
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+  const [date, setDate] = useState("")
+  const [media, setMedia] = useState("")
 
-   const onMediaChange = (event) => {
-     if (event.target.files && event.target.files[0]) {
-       const file = event.target.files[0];
-       const fileURL = URL.createObjectURL(file);
+  const { createPost } = usePostStore();
 
-      
-       if (file.type.startsWith("image/")) {
-         setMediaType("image");
-       } else if (file.type.startsWith("video/")) {
-         setMediaType("video");
-       }
+ 
+   
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-       setMediaPreview(fileURL);
-     }
-   };
+    const data = {
+      title,
+      content,
+      date,
+    };
+
+    await createPost(data); // Call the post store function
+    onClose()
+  };
+
+  //Media preview
+  const onMediaChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const fileURL = URL.createObjectURL(file);
+
+      if (file.type.startsWith("image/")) {
+        setMediaType("image");
+      } else if (file.type.startsWith("video/")) {
+        setMediaType("video");
+      }
+
+      setMediaPreview(fileURL);
+    }
+  };
 
   return (
     <div className="backgroundBlur">
       <div className="createContainer">
         <div className="closeFlex">
-          <div className="createCloseModal" >
+          <div className="createCloseModal">
             <IoMdClose className="createClose" onClick={onClose} />
           </div>
         </div>
@@ -35,7 +57,7 @@ export default function CreateMemory({onClose}) {
           <h2>New Memory</h2>
           <p>Post a new memory on your timeline here.</p>
         </div>
-        <form className="createMemoryForm">
+        <form onSubmit={handleSubmit} className="createMemoryForm">
           <div className="createLeft">
             <p className="createLabels">Add a photo or video</p>
             <input
@@ -78,7 +100,9 @@ export default function CreateMemory({onClose}) {
               name="date"
               type="date"
               placeholder="dd.mm.yyyy"
+              value={date}
               required
+              onChange={(e) => setDate(e.target.value)}
             ></input>
           </div>
 
@@ -90,13 +114,21 @@ export default function CreateMemory({onClose}) {
               className="createTitle"
               name="title"
               type="text"
+              value={title}
               required
+              onChange={(e) => setTitle(e.target.value)}
             ></input>
 
             <label className="createLabels" htmlFor="content" required>
               Description*
             </label>
-            <textarea className="createContent" name="content"></textarea>
+            <textarea
+              className="createContent"
+              name="content"
+              value={content}
+              required
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
 
             <button className="createButton" type="submit">
               Create

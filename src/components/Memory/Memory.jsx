@@ -3,19 +3,19 @@ import bgImg from "../../assets/background.png";
 
 
 
-export default function Memory({onClick}) {
+export default function Memory({className,post, onClick}) {
 
 
   return (
-    <div className="memoryContainer" onClick={onClick}>
+    <div className={`memoryContainer ${className}`}  onClick={onClick}>
       
       <div className="memoryTitle">
-        <p>Title</p>
+        <p>{post.title}</p>
       </div>
       <div className="memoryMedia">
         <img src={bgImg} alt=""></img>
       </div>
-      <div className="memoryDate">10.05.2023</div>
+      <div className="memoryDate">{post.date}</div>
     </div>
   );
 }

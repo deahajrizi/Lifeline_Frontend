@@ -5,16 +5,14 @@ import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
 
 export default function Home() {
-
-  const {userInfo} = useAuthStore()
-  const {getUserProfile, user} = useUserStore()
-   useEffect(() => {
-     if (userInfo && userInfo._id) {
-      
-       getUserProfile(userInfo._id);
-     }
-   }, [userInfo, user]);
-   console.log(userInfo)
+  const { userInfo } = useAuthStore();
+  const { getUserProfile, user } = useUserStore();
+  useEffect(() => {
+    if (userInfo && userInfo._id) {
+      getUserProfile(userInfo._id);
+    }
+  }, [userInfo, user]);
+  console.log(userInfo);
   return (
     <div>
       {userInfo ? (
@@ -27,7 +25,6 @@ export default function Home() {
           headerTitleMargin="220px auto"
           headerTitleWidth="100%"
         />
-    
       ) : (
         <Header
           title="Welcome to"
