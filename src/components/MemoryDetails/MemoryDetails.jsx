@@ -4,25 +4,36 @@ import { IoMdClose } from "react-icons/io";
 import { usePostStore } from "../../stores/postStore";
 import { formatDate } from "../../utils/functions";
 import { useAuthStore } from "../../stores/authStore";
+import { useState } from "react";
+
 
 export default function MemoryDetails({ post, setShowDetails }) {
   const { getPosts } = usePostStore(); 
-  const {userInfo } = useAuthStore();
- 
+  const { userInfo } = useAuthStore();
+  const [showEditMemory, setShowEditMemory] = useState(false);
+
   const handleClose = () => {
     setShowDetails(false);
-    if(userInfo){
-    getPosts(); 
+    if (userInfo) {
+      getPosts(); 
     }
   };
-  
+
+  const handleEdit = () => {
+    setShowDetails(false);
+    setShowEditMemory(true);
+  };
+
+  if (showEditMemory) {
+    return <EditMemory post={post} setShowEditMemory={setShowEditMemory} />;
+  }
+
 
   return (
-  
     <div className="mainDetailsContainer">
       <div className="detailsContainer">
         <div className="mediaContainer">
-          <img src={bgImg}></img>
+          <img src={bgImg} alt="Background" />
         </div>
 
         <div className="textContainer">
@@ -31,8 +42,15 @@ export default function MemoryDetails({ post, setShowDetails }) {
               <h2 className="postTitle">{post.title}</h2>
               <p>{formatDate(post.date)}</p>
             </div>
-            <div className="closeModal">
-              <IoMdClose className="close" onClick={handleClose} />
+            <div className="rightActions">
+                {userInfo && userInfo._id === post.user && (
+                  <button className="editMemoryButton" onClick={handleEdit}>
+                    Edit
+                  </button>
+                )}
+                <div className="closeModal">
+                  <IoMdClose className="close" onClick={handleClose} />
+                </div>
             </div>
           </div>
           <div className="middleText">
@@ -71,6 +89,5 @@ export default function MemoryDetails({ post, setShowDetails }) {
         </div>
       </div>
     </div>
- 
   );
 }
