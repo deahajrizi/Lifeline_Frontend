@@ -39,14 +39,18 @@ export const usePostStore = create((set) => ({
     }
   },
 
-  uploadPostMedia: (id, formData) => {
+  uploadPostMedia: (_id, formData) => {
     axios
-      .put(`http://localhost:8080/api/user/upload-post-media/${id}`, formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .put(
+        `http://localhost:8080/api/user/upload-post-media/${_id}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         set((state) => ({
           posts: state.posts.map((post) =>
@@ -64,7 +68,7 @@ export const usePostStore = create((set) => ({
         set({ error: error.message, loading: false });
       });
   },
-   getPosts: async () => {
+  getPosts: async () => {
     set({ loading: true, error: null });
 
     try {
@@ -81,6 +85,30 @@ export const usePostStore = create((set) => ({
         error: error.message,
         loading: false,
       });
+    }
+  },
+  getSinglePost: async (postId) => {
+    set({ loading: true, error: null });
+
+    const authToken = localStorage.getItem("token");
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/post/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch post",
+        loading: false,
+      });
+      return null;
     }
   },
 }));

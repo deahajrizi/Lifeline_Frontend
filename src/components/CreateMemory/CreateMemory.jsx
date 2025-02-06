@@ -13,8 +13,6 @@ export default function CreateMemory({onClose}) {
 
   const { createPost } = usePostStore();
 
- 
-   
   const handleSubmit = async (e) => {
     e.preventDefault();
 

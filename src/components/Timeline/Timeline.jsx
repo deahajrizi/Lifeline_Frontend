@@ -8,26 +8,38 @@ import { useEffect, useState } from "react";
 
 export default function Timeline() {
   const [showDetails, setShowDetails] = useState(false); // Memory Details Modal
-  const { posts, loading, error, getPosts } = usePostStore(); // Fetch posts from the store
+  const [selectedPost, setSelectedPost] = useState(null);
+  const { posts, loading, error, getPosts, getSinglePost } = usePostStore(); // Fetch posts from the store
   const { userInfo } = useAuthStore();
-    // Fake posts to display when the user isn't logged in
+  // Fake posts to display when the user isn't logged in
   const fakePosts = [
-    { id: 1, title: "First Memory", date: "01.01.2021", media: "fake-image1.jpg" },
-    { id: 2, title: "Second Memory", date: "15.03.2021", media: "fake-image2.jpg" },
-    { id: 3, title: "Third Memory", date: "22.06.2021", media: "fake-image3.jpg" },
+    {_id: 1,title: "First Memory", content: "fake content here", date: "01.01.2021",media: "fake-image1.jpg",},
+    {_id: 2,title: "Second Memory", content: "fake content here", date: "15.03.2021",media: "fake-image2.jpg",},
+    {_id: 3,title: "Third Memory", content: "fake content here", date: "22.06.2021",media: "fake-image3.jpg", },
   ];
 
   useEffect(() => {
-    if(userInfo){
-    getPosts();
-
+    if (userInfo) {
+      getPosts();
     }
   }, [getPosts]);
+
+  const handleShowDetails = async (post) => {
+    if (userInfo) {
+      const fetchedPost = await getSinglePost(post._id);
+      setSelectedPost(fetchedPost);
+    } else {
+      setSelectedPost(post);
+    }
+    setShowDetails(true);
+  };
 
   return (
     <>
       <div className="timelineContainer">
-        {showDetails && <MemoryDetails setShowDetails={setShowDetails} />}
+        {showDetails && selectedPost && (
+          <MemoryDetails post={selectedPost} setShowDetails={setShowDetails} />
+        )}
 
         {/* Left Memory Container */}
         <div className="leftMemoryContainer">
@@ -38,14 +50,13 @@ export default function Timeline() {
           ) : userInfo ? (
             // If user is logged in, show their posts
             posts.map((post, index) => {
-              console.log(post.id);
               if (index % 2 === 0) {
                 return (
                   <Memory
-                    key={post.id}
+                    key={post._id}
                     post={post}
                     className="leftMemory"
-                    onClick={() => setShowDetails(!showDetails)} // Toggle Memory Details modal
+                    onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
                   />
                 );
               }
@@ -57,10 +68,10 @@ export default function Timeline() {
               if (index % 2 === 0) {
                 return (
                   <Memory
-                    key={post.id}
+                    key={post._id}
                     post={post}
                     className="leftMemory"
-                    onClick={() => setShowDetails(!showDetails)} // Toggle Memory Details modal
+                    onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
                   />
                 );
               }
@@ -80,10 +91,11 @@ export default function Timeline() {
                 if (index % 2 !== 0) {
                   return (
                     <Memory
-                      key={post.id}
+                      key={post._id}
                       post={post}
                       className="rightMemory"
-                      onClick={() => setShowDetails(!showDetails)} // Toggle Memory Details modal
+                      onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
+                      
                     />
                   );
                 }
@@ -94,11 +106,11 @@ export default function Timeline() {
                 if (index % 2 !== 0) {
                   return (
                     <Memory
-                      key={post.id}
+                      key={post._id}
                       post={post}
                       className="rightMemory"
-
-                      onClick={() => setShowDetails(!showDetails)} // Toggle Memory Details modal
+                      onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
+                
                     />
                   );
                 }
