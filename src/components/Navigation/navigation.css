@@ -16,7 +16,7 @@ nav {
   font-family: "Manrope", sans-serif;
   transition: background-color 250ms ease-in-out;
 }
-.navScrolled{
+.navScrolled {
   background-color: rgb(255, 255, 255, 0.9);
 }
 

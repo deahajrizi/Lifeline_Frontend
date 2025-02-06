@@ -2,16 +2,23 @@ import "./memoryDetails.css";
 import bgImg from "../../assets/background.png";
 import { IoMdClose } from "react-icons/io";
 import { usePostStore } from "../../stores/postStore";
+import { formatDate } from "../../utils/functions";
+import { useAuthStore } from "../../stores/authStore";
 
 export default function MemoryDetails({ post, setShowDetails }) {
-  const { getPosts } = usePostStore(); // Get getPosts from store
-
+  const { getPosts } = usePostStore(); 
+  const {userInfo } = useAuthStore();
+ 
   const handleClose = () => {
     setShowDetails(false);
-    getPosts(); // Refetch posts when closing
+    if(userInfo){
+    getPosts(); 
+    }
   };
+  
 
   return (
+  
     <div className="mainDetailsContainer">
       <div className="detailsContainer">
         <div className="mediaContainer">
@@ -20,17 +27,16 @@ export default function MemoryDetails({ post, setShowDetails }) {
 
         <div className="textContainer">
           <div className="topText">
-            <h2>{post.title}</h2>
+            <div className="titleAndDate">
+              <h2 className="postTitle">{post.title}</h2>
+              <p>{formatDate(post.date)}</p>
+            </div>
             <div className="closeModal">
-              <IoMdClose
-                className="close"
-                onClick={handleClose}
-              />
+              <IoMdClose className="close" onClick={handleClose} />
             </div>
           </div>
           <div className="middleText">
-            <p>.{post.date}</p>
-            <p>{post.content}{" "}</p>
+            <p>{post.content} </p>
             <div className="memoryAuthor">
               <div className="memoryAuthorAvatar">
                 <img src={bgImg}></img>
@@ -65,5 +71,6 @@ export default function MemoryDetails({ post, setShowDetails }) {
         </div>
       </div>
     </div>
+ 
   );
 }

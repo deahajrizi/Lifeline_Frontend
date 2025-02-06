@@ -2,7 +2,6 @@
     width: 90%;
     margin: 100px auto 170px;
     position: relative;
-    z-index: 2;;
     display: flex;
     justify-content: space-evenly;
 }

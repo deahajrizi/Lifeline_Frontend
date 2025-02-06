@@ -1,13 +1,11 @@
 import "./navigation.css"
 import logo from "../../assets/Lifeline_Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../../stores/authStore";
 import { useUserStore } from "../../stores/userStore";
 
 export default function Navigation() {
-
-
     const {userInfo, logout} = useAuthStore()
     const {userLogout} = useUserStore()
     const navigate = useNavigate()

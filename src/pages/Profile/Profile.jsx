@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../stores/userStore";
 import { useAuthStore } from "../../stores/authStore.js";
 import defaultAvatar from "../../assets/default-avatar.png";
+import { alwaysScrollToTop } from "../../utils/functions.js";
 
 export default function Profile() {
   const { userInfo } = useAuthStore();
@@ -19,6 +20,9 @@ export default function Profile() {
   const [email, setEmail] = useState("");
 
   const navigate = useNavigate()
+  useEffect(() => {
+      alwaysScrollToTop()
+  }, [])
   useEffect(() => {
     if (!user && !userInfo) {
       // If no user information is available, redirect to login page

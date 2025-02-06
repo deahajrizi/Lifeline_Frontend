@@ -111,4 +111,36 @@ export const usePostStore = create((set) => ({
       return null;
     }
   },
+  updatePost: async (postId, data) => {
+    set({ loading: true, message: null, error: null, success: false });
+
+    const authToken = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/post/${postId}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      set({
+        loading: false,
+        message: response.data.message || "Post updated successfully",
+        success: true,
+      });
+
+      return response.data;
+    } catch (error) {
+      set({
+        loading: false,
+        error: error.response?.data?.message || "Failed to update post",
+        success: false,
+      });
+      return null;
+    }
+  },
 }));

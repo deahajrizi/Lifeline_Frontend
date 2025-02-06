@@ -4,14 +4,14 @@
   height: 100%;
   background-color: rgb(191, 191, 191, 0.3);
   z-index: 8;
-  top: 75px;
- backdrop-filter: blur(4px);
-    font-family: "Fustat", sans-serif;
-
+  top: 0;
+  backdrop-filter: blur(4px);
+  font-family: "Fustat", sans-serif;
+  z-index: 16;
 }
 .detailsContainer{
     width: 80%;
-    height: 84vh;
+    height: 92vh;
     background-color: white;
     margin: 25px auto;
     display: flex;
@@ -35,7 +35,12 @@
     display: flex;
     justify-content: space-between;
     font-family: "felt-tip-woman", sans-serif;
+    margin-bottom: 10px;
     
+}
+.postTitle{
+    font-size: 32px;
+    margin-bottom: 5px;
 }
 .close{
     font-size: 45px;

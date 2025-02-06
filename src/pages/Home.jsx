@@ -3,14 +3,17 @@ import Header from "../components/Header/Header";
 import Timeline from "../components/Timeline/Timeline";
 import { useAuthStore } from "../stores/authStore";
 import { useUserStore } from "../stores/userStore";
+import { alwaysScrollToTop } from "../utils/functions";
 
 export default function Home() {
   const { userInfo } = useAuthStore();
   const { getUserProfile, user } = useUserStore();
   useEffect(() => {
+    alwaysScrollToTop()
     if (userInfo && userInfo._id) {
       getUserProfile(userInfo._id);
     }
+    
   }, [userInfo, user]);
   console.log(userInfo);
   return (

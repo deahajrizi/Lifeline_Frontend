@@ -1,5 +1,6 @@
 import "./memory.css"
 import bgImg from "../../assets/background.png";
+import { formatDate } from "../../utils/functions";
 
 
 
@@ -15,7 +16,7 @@ export default function Memory({className,post, onClick}) {
       <div className="memoryMedia">
         <img src={bgImg} alt=""></img>
       </div>
-      <div className="memoryDate">{post.date}</div>
+      <div className="memoryDate">{formatDate(post.date)}</div>
     </div>
   );
 }

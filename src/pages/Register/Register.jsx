@@ -5,6 +5,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { useUserStore } from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
+import { alwaysScrollToTop } from "../../utils/functions";
 
 export default function Register() {
 
@@ -20,6 +21,7 @@ export default function Register() {
    const navigate = useNavigate();
 
    useEffect(() => {
+    alwaysScrollToTop()
      if (success) {
        setCredentials({ user });
        setUsername("");
