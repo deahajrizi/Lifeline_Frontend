@@ -7,10 +7,9 @@ import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 
 
-export default function MemoryDetails({ post, setShowDetails }) {
+export default function MemoryDetails({ post, setShowDetails, handleEdit }) {
   const { getPosts } = usePostStore(); 
   const { userInfo } = useAuthStore();
-  const [showEditMemory, setShowEditMemory] = useState(false);
 
   const handleClose = () => {
     setShowDetails(false);
@@ -19,14 +18,6 @@ export default function MemoryDetails({ post, setShowDetails }) {
     }
   };
 
-  const handleEdit = () => {
-    setShowDetails(false);
-    setShowEditMemory(true);
-  };
-
-  if (showEditMemory) {
-    return <EditMemory post={post} setShowEditMemory={setShowEditMemory} />;
-  }
 
 
   return (
@@ -59,7 +50,7 @@ export default function MemoryDetails({ post, setShowDetails }) {
               <div className="memoryAuthorAvatar">
                 <img src={bgImg}></img>
               </div>
-              <p>Author Name</p>
+              <p>{post.author}</p>
             </div>
 
             <div className="bottomText">

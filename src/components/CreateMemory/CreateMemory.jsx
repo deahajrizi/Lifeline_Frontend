@@ -11,7 +11,7 @@ export default function CreateMemory({onClose}) {
   const [date, setDate] = useState("")
   const [media, setMedia] = useState("")
 
-  const { createPost } = usePostStore();
+  const { createPost, getPosts} = usePostStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +24,7 @@ export default function CreateMemory({onClose}) {
 
     await createPost(data); // Call the post store function
     onClose()
+    getPosts()
   };
 
   //Media preview

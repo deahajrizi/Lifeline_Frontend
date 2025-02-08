@@ -143,4 +143,25 @@ export const usePostStore = create((set) => ({
       return null;
     }
   },
+  deletePost: async (postId) => {
+    set({ loading: true, error: null, success: false });
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/post/${postId}`
+      );
+      set((state) => ({
+        posts: state.posts.filter((post) => post.id !== postId),
+        loading: false,
+        success: true,
+      }));
+      return response.data;
+    } catch (error) {
+      set({
+        loading: false,
+        error: error.response?.data?.message || "Failed to delete post",
+        success: false,
+      });
+      return null;
+    }
+  },
 }));
