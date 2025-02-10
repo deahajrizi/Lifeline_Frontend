@@ -126,4 +126,31 @@ export const useUserStore = create((set) => ({
         console.error("Error updating profile:", error); // Debugging line
       });
   },
+  addFriend: async (username) => {
+    set({ loading: true, error: null, success: false });
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/user/add-friend",
+        { username }
+      );
+      set((state) => ({
+        userInfo: {
+          ...state.userInfo,
+          friends: response.data.friends,
+        },
+        loading: false,
+        success: true,
+      }));
+      // Sync user info with authStore
+      const { setCredentials } = useAuthStore.getState();
+      setCredentials({ ...state.userInfo, friends: response.data.friends });
+      console.log("Friend added:", response.data); // Debugging line
+    } catch (error) {
+      set({
+        loading: false,
+        error: error.response?.data?.message || "Failed to add friend",
+      });
+      console.error("Error adding friend:", error); // Debugging line
+    }
+  },
 }));

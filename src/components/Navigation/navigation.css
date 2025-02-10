@@ -47,6 +47,7 @@ nav {
   border: 1px solid transparent;
   background-color: #638595;
   transition: 250ms ease-in-out;
+  color: white;
 }
 .navButton:hover {
   background-color: white;

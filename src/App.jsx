@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/Profile/Profile";
 import Redirect from "./pages/Redirect/Redirect";
+import Friends from "./pages/Friends/Friends";
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/friends" element={<Friends />} />
         <Route path="/*" element={<Redirect />} />
       </Routes>
       <Footer />

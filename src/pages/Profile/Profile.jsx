@@ -26,7 +26,7 @@ export default function Profile() {
   useEffect(() => {
     if (!user && !userInfo) {
       // If no user information is available, redirect to login page
-      navigate("/login");
+      navigate("/redirect");
     } else {
       // Proceed to get the user profile
       if (userInfo && userInfo._id) {
@@ -52,6 +52,7 @@ export default function Profile() {
     setIsEditing(true);
   };
   const handleAvatarChange = (e) => {
+    e.preventDefault();
     const file = e.target.files[0];
     console.log(file); // Debug: Check if the file is selected correctly
 
@@ -247,13 +248,7 @@ export default function Profile() {
             </button>
           )}
         </form>
-        <p className="underFormText">
-          Already have an account? Login{" "}
-          <Link className="formLink" to="/login">
-            here
-          </Link>
-          .
-        </p>
+       
       </div>
     </>
   );

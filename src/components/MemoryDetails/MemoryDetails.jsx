@@ -50,7 +50,7 @@ export default function MemoryDetails({ post, setShowDetails, handleEdit }) {
               <div className="memoryAuthorAvatar">
                 <img src={bgImg}></img>
               </div>
-              <p>{post.author}</p>
+              <p>Dea Hajrizi</p>
             </div>
 
             <div className="bottomText">

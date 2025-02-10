@@ -29,7 +29,7 @@ export default function Header({ title, subtitle, showLogo = true, showButton = 
           </div>
         )}
       </div>
-        {userInfo ? (
+        {userInfo && showButton ? (
           <>
           <HeaderButton onClick={handleButtonClick} buttonText={"Create a new memory"} />
           {showModal && <CreateMemory onClose={handleCloseModal} />}
@@ -37,7 +37,7 @@ export default function Header({ title, subtitle, showLogo = true, showButton = 
         ) : (
           showButton && ( 
           <>
-          <HeaderButton buttonLink="/login" buttonText={"Create your own Lifeline"} />
+          <HeaderButton buttonLink="/register" buttonText={"Create your own Lifeline"} />
           
           </>
           )

@@ -44,6 +44,7 @@ export default function Navigation() {
         <div className="linkContainer">
           <Link to="/">Home</Link>
           <Link to="/profile">Profile</Link>
+          <Link to="/friends">Friends</Link>
           <button className="navButton" onClick={handleLogout}>
             Logout
           </button>
@@ -53,7 +54,7 @@ export default function Navigation() {
           <Link to="/">Home</Link>
           <button className="navButton">
             <Link to="/login" className="coloredLink">
-              Register / Login
+              Login / Register
             </Link>
           </button>
         </div>

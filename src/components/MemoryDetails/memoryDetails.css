@@ -11,9 +11,9 @@
 }
 .detailsContainer {
   width: 80%;
-  height: 92vh;
+  height: 80vh;
   background-color: white;
-  margin: 25px auto;
+  margin: 5% auto;
   display: flex;
 }
 .mediaContainer,
