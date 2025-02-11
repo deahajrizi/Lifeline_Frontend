@@ -8,6 +8,7 @@ export const useUserStore = create((set) => ({
   error: null,
   success: false,
   message: null,
+  friendsProfiles: [],
 
   register: async (data) => {
     set({ userLoading: true, error: null });
@@ -67,11 +68,12 @@ export const useUserStore = create((set) => ({
 
   getUserProfile: (_id) => {
     set({ loading: true, error: null });
-    axios
+    return axios
       .get(`http://localhost:8080/api/user/profile/${_id}`, {
         withCredentials: true,
       })
       .then((response) => {
+        console.log("API response:", response); // Debugging: Log the API response
         set(() => ({
           user: response.data.user,
           loading: false,
@@ -79,9 +81,11 @@ export const useUserStore = create((set) => ({
         }));
         const { setCredentials } = useAuthStore.getState();
         setCredentials(response.data);
+        return response; // Return the entire response object
       })
       .catch((error) => {
         set({ error: error.message, loading: false });
+        throw error; // Throw the error to be caught in the component
       });
   },
 
@@ -125,6 +129,23 @@ export const useUserStore = create((set) => ({
         set({ error: error.message });
         console.error("Error updating profile:", error); // Debugging line
       });
+  },
+  getFriendsProfiles: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/user/friends"
+      );
+      set(() => ({
+        friendsProfiles: response.data.friends,
+        loading: false,
+        success: true,
+      }));
+      console.log("Friends profiles:", response.data.friends); // Debugging line
+    } catch (error) {
+      set({ error: error.response?.data?.message || "Failed to get friends" });
+      console.error("Error getting friends:", error); // Debugging line
+    }
   },
   addFriend: async (username) => {
     set({ loading: true, error: null, success: false });

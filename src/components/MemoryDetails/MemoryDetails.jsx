@@ -7,14 +7,18 @@ import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 
 
-export default function MemoryDetails({ post, setShowDetails, handleEdit }) {
+export default function MemoryDetails({ post, setShowDetails, handleEdit, friendId}) {
   const { getPosts } = usePostStore(); 
   const { userInfo } = useAuthStore();
 
   const handleClose = () => {
     setShowDetails(false);
     if (userInfo) {
-      getPosts(); 
+      if (friendId) {
+        getPosts(friendId);
+      } else {
+        getPosts();
+      }
     }
   };
 

@@ -42,7 +42,7 @@ export const usePostStore = create((set) => ({
   uploadPostMedia: (_id, formData) => {
     axios
       .put(
-        `http://localhost:8080/api/user/upload-post-media/${_id}`,
+        `http://localhost:8080/api/post/upload-post-media/${_id}`,
         formData,
         {
           withCredentials: true,
@@ -68,11 +68,15 @@ export const usePostStore = create((set) => ({
         set({ error: error.message, loading: false });
       });
   },
-  getPosts: async () => {
+  getPosts: async (friendId = null) => {
     set({ loading: true, error: null });
 
     try {
-      const response = await axios.get("http://localhost:8080/api/post/all", {
+      const url = friendId
+        ? `http://localhost:8080/api/post/all/${friendId}`
+        : "http://localhost:8080/api/post/all";
+
+      const response = await axios.get(url, {
         withCredentials: true,
       });
 

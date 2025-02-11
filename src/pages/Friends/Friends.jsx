@@ -1,19 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import { useUserStore } from "../../stores/userStore";
 import "./friends.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Friends() {
     const [friendUsername, setFriendUsername] = useState("");
-    const {addFriend, loading, error ,success} = useUserStore()
+    const {addFriend, getFriendsProfiles, friendsProfiles, loading, error ,success} = useUserStore()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getFriendsProfiles();
+    }, [getFriendsProfiles]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await addFriend(friendUsername);
         if (success) {
             console.log("Friend added");
+            await getFriendsProfiles();
+            setFriendUsername("")
         }
     };
+
+    const showFriendLifeline = (friendId) => {
+      navigate(`/friendsLifeline/${friendId}`);
+    }
+
+
   return (
     <>
       <Header
@@ -37,21 +51,16 @@ export default function Friends() {
           <button>Add</button>
         </form>
         <div className="friendsList">
-          <div className="friend">
-            <img src=""></img>
-            <p className="friendName">Layla King</p>
-            <p className="friendUsername">@Layla12</p>
-          </div>
-          <div className="friend">
-            <img src=""></img>
-            <p className="friendName">Sam Dun</p>
-            <p className="friendUsername">@samdun213</p>
-          </div>
-          <div className="friend">
-            <img src=""></img>
-            <p className="friendName">Jon Maverick</p>
-            <p className="friendUsername">@JonMav</p>
-          </div>
+          {friendsProfiles.map((friend) => (
+            <div className="friend" key={friend._id} onClick={() => showFriendLifeline(friend._id)}>
+              <img src={friend.avatar} alt={`${friend.username}'s profile`} />
+              <p className="friendName">
+                {friend.first_name} {friend.last_name}
+              </p>
+              <p className="friendUsername">@{friend.username}</p>
+            </div>
+          ))}
+          
         </div>
       </div>
     </>

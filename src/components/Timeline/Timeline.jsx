@@ -7,7 +7,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import "./timeline.css";
 import { useEffect, useState } from "react";
 
-export default function Timeline() {
+export default function Timeline({friendId}) {
   const [showDetails, setShowDetails] = useState(false); // Memory Details Modal
   const [selectedPost, setSelectedPost] = useState(null);
   const [showEditMemory, setShowEditMemory] = useState(false);
@@ -22,18 +22,21 @@ export default function Timeline() {
 
   useEffect(() => {
     if (userInfo) {
+      if(friendId){
+        getPosts(friendId);
+      } else {
       getPosts();
+      }
     }
-  }, [getPosts]);
+  }, [getPosts, friendId, userInfo]);
 
   const handleShowDetails = async (post) => {
     if (userInfo) {
       const fetchedPost = await getSinglePost(post._id);
       setSelectedPost(fetchedPost);
-    } else {
       setSelectedPost(post);
-    }
-    setShowDetails(true);
+      setShowDetails(true);
+    } 
   };
 
   const handleEdit = () => {
@@ -45,7 +48,7 @@ export default function Timeline() {
     <>
       <div className="timelineContainer">
         {showDetails && selectedPost && (
-          <MemoryDetails post={selectedPost} setShowDetails={setShowDetails} handleEdit={handleEdit}/>
+          <MemoryDetails post={selectedPost} friendId={friendId} setShowDetails={setShowDetails} handleEdit={handleEdit}/>
         )}
          {showEditMemory && selectedPost && (
           <EditMemory postId={selectedPost._id} setShowEditMemory={setShowEditMemory} />
