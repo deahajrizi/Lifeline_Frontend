@@ -1,4 +1,4 @@
-import './friendsLifeline.css';
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { alwaysScrollToTop } from '../../utils/functions';
@@ -42,7 +42,7 @@ export default function FriendsLifeline() {
         headerTitleMargin="220px 200px"
         headerTitleWidth="100%"
       />
-      <Timeline friendId={friendId} />{" "}
+      <Timeline friendId={friendId} />
 
     </>
   );

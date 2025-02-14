@@ -3,31 +3,28 @@ import Header from "../../components/Header/Header";
 import { useUserStore } from "../../stores/userStore";
 import "./friends.css";
 import { useNavigate } from "react-router-dom";
+import { alwaysScrollToTop } from "../../utils/functions";
 
 export default function Friends() {
     const [friendUsername, setFriendUsername] = useState("");
-    const {addFriend, getFriendsProfiles, friendsProfiles, loading, error ,success} = useUserStore()
+    const {addFriend, getFriendsProfiles, friendsProfiles} = useUserStore()
     const navigate = useNavigate();
 
     useEffect(() => {
+        alwaysScrollToTop();
         getFriendsProfiles();
     }, [getFriendsProfiles]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+      e.preventDefault();
         await addFriend(friendUsername);
-        if (success) {
-            console.log("Friend added");
-            await getFriendsProfiles();
-            setFriendUsername("")
-        }
+        await getFriendsProfiles(); 
+        setFriendUsername(""); 
     };
 
     const showFriendLifeline = (friendId) => {
       navigate(`/friendsLifeline/${friendId}`);
     }
-
-
   return (
     <>
       <Header
@@ -60,7 +57,6 @@ export default function Friends() {
               <p className="friendUsername">@{friend.username}</p>
             </div>
           ))}
-          
         </div>
       </div>
     </>

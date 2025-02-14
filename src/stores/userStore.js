@@ -2,7 +2,9 @@ import { create } from 'zustand'
 import axios from 'axios'
 import { useAuthStore } from './authStore'
 
+
 export const useUserStore = create((set) => ({
+
   user: null,
   userLoading: false,
   error: null,
@@ -66,45 +68,45 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  getUserProfile: (_id) => {
+  getUserProfile: async (_id) => {
     set({ loading: true, error: null });
-    return axios
-      .get(`http://localhost:8080/api/user/profile/${_id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log("API response:", response); // Debugging: Log the API response
-        set(() => ({
-          user: response.data.user,
-          loading: false,
-          success: true,
-        }));
-        const { setCredentials } = useAuthStore.getState();
-        setCredentials(response.data);
-        return response; // Return the entire response object
-      })
-      .catch((error) => {
-        set({ error: error.message, loading: false });
-        throw error; // Throw the error to be caught in the component
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/user/profile/${_id}`,
+        { withCredentials: true }
+      );
+      console.log("API response for updated profile:", response); // Debugging: Check the response
+
+      set({
+        user: response.data.user, // Make sure you're setting the user correctly
+        loading: false,
+        success: true,
       });
+
+      const { setCredentials } = useAuthStore.getState();
+      setCredentials(response.data);
+
+      return response; // Return response to be used in the component
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error; // Throw error for the component to handle
+    }
   },
 
   uploadAvatar: (_id, formData) => {
     axios
       .put(`http://localhost:8080/api/user/upload-avatar/${_id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
       })
       .then((response) => {
         set(() => ({
-          user: response.data.user,
+          user: response.data.user, // Ensure this includes the updated avatar
           loading: false,
           success: true,
         }));
         const { setCredentials } = useAuthStore.getState();
-        setCredentials(response.data);
+        setCredentials(response.data); // Sync authStore with the updated user
       })
       .catch((error) => {
         set({ error: error.message, loading: false });
@@ -148,30 +150,30 @@ export const useUserStore = create((set) => ({
     }
   },
   addFriend: async (username) => {
-    set({ loading: true, error: null, success: false });
+    set({ loading: true, error: null, success: false }); 
     try {
       const response = await axios.put(
         "http://localhost:8080/api/user/add-friend",
         { username }
       );
       set((state) => ({
-        userInfo: {
-          ...state.userInfo,
-          friends: response.data.friends,
-        },
+        user: { ...state.user, friends: response.data.friends }, 
         loading: false,
         success: true,
       }));
-      // Sync user info with authStore
+      // Sync with authStore
       const { setCredentials } = useAuthStore.getState();
-      setCredentials({ ...state.userInfo, friends: response.data.friends });
-      console.log("Friend added:", response.data); // Debugging line
+      setCredentials({ ...state.user, friends: response.data.friends });
+
+  
     } catch (error) {
       set({
         loading: false,
         error: error.response?.data?.message || "Failed to add friend",
+        success: false, // Ensure success is false
       });
-      console.error("Error adding friend:", error); // Debugging line
+     
+   
     }
   },
 }));

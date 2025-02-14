@@ -5,11 +5,14 @@ import { usePostStore } from "../../stores/postStore";
 import { useAuthStore } from "../../stores/authStore";
 import { formatDateInput } from "../../utils/functions";
 import DeleteMemory from "../DeleteMemory/DeleteMemory";
+import {  toast } from "react-toastify";
 
 export default function EditMemory({ postId, setShowEditMemory }) {
   const { getPosts } = usePostStore();
   const { userInfo } = useAuthStore();
-  const { updatePost, getSinglePost } = usePostStore();
+  const { updatePost, getSinglePost, uploadPostMedia } = usePostStore();
+  const success = () => toast.success("Memory updated successfully!");
+  const error = () => toast.error("Failed to update memory");
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -17,16 +20,27 @@ export default function EditMemory({ postId, setShowEditMemory }) {
   const [mediaType, setMediaType] = useState("");
   const [mediaPreview, setMediaPreview] = useState(null);
   const [ showDeleteMemory, setShowDeleteMemory] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
 
   useEffect(() => {
     getSinglePost(postId).then((post) => {
       setTitle(post.title);
       setContent(post.content);
       setDate(formatDateInput(post.date));
+      if (post.media) {
+        setMediaPreview(post.media);
+        const mediaType = post.media.split(".").pop().toLowerCase();
+        if (["jpg", "jpeg", "png", "webp", "gif"].includes(mediaType)) {
+          setMediaType("image");
+        } else if (["mp4", "webm", "mov"].includes(mediaType)) {
+          setMediaType("video");
+        }
+      }
     });
   }, [getSinglePost, postId]);
 
-  //Media preview when editing
+  // Media preview when editing
   const onMediaChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -39,14 +53,17 @@ export default function EditMemory({ postId, setShowEditMemory }) {
         setMediaType("video");
       }
       setMediaPreview(fileURL);
+      setSelectedFile(file);
     }
   };
+
   const handleClose = () => {
     setShowEditMemory(false);
     if (userInfo) {
       getPosts();
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -54,9 +71,28 @@ export default function EditMemory({ postId, setShowEditMemory }) {
       content,
       date,
     };
-    await updatePost(postId, data);
-    handleClose();
+
+    try {
+      // Update the post content
+      await updatePost(postId, data);
+
+      // Upload the media if a new file is selected
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("media", selectedFile);
+        await uploadPostMedia(postId, formData);
+      }
+
+      // Close the modal after successful update
+      handleClose();
+      success();
+    } catch (error) {
+      error()
+      console.error("Failed to update post or upload media:", error);
+    }
   };
+
+ 
   const handleShowDeleteMemory = (e) => {
     e.preventDefault();
     setShowDeleteMemory(true);
@@ -150,22 +186,18 @@ export default function EditMemory({ postId, setShowEditMemory }) {
             <button className="createButton" type="submit">
               Save
             </button>
-            <button
-              className="deleteButton"
-              onClick={handleShowDeleteMemory}
-            >
+            <button className="deleteButton" onClick={handleShowDeleteMemory}>
               Delete
             </button>
           </div>
         </form>
       </div>
       {showDeleteMemory && (
-          <DeleteMemory
-            postId={postId}
-            setShowDeleteMemory={setShowDeleteMemory}
-            setShowEditMemory={setShowEditMemory}
-          />
-    
+        <DeleteMemory
+          postId={postId}
+          setShowDeleteMemory={setShowDeleteMemory}
+          setShowEditMemory={setShowEditMemory}
+        />
       )}
     </div>
   );

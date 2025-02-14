@@ -1,15 +1,18 @@
 import "./profile.css";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../stores/userStore";
 import { useAuthStore } from "../../stores/authStore.js";
 import defaultAvatar from "../../assets/default-avatar.png";
 import { alwaysScrollToTop } from "../../utils/functions.js";
+import {toast} from "react-toastify";
 
 export default function Profile() {
   const { userInfo } = useAuthStore();
   const { getUserProfile, user, editProfile, uploadAvatar } = useUserStore();
+  const success = () => toast.success("Profile updated successfully!");
+  const error = () => toast.error("Profile update failed!");
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -35,15 +38,15 @@ export default function Profile() {
         getUserProfile(user._id);
       }
     }
-  }, [userInfo, user, getUserProfile]);
+  }, [getUserProfile, user ]);
   useEffect(() => {
     if (user) {
       setUsername(user.username),
         setFirstName(user.first_name),
         setLastName(user.last_name),
         setEmail(user.email);
-      setAvatar(user.avatar);
-      setAvatarPreview(user.avatar || defaultAvatar); // Set initial avatar preview
+       setAvatar(user.avatar); // Set avatar from store
+       setAvatarPreview(user.avatar || defaultAvatar); 
     }
   }, [user]);
 
@@ -86,13 +89,24 @@ export default function Profile() {
       }
 
       // Fetch updated profile to reflect changes
-      await getUserProfile(userInfo._id);
+      const updatedProfile = await getUserProfile(userInfo._id);
+      console.log("Updated Profile:", updatedProfile); // Debugging: Check the updated profile
 
+      // Ensure `user` is not undefined before trying to access `avatar`
+      if (updatedProfile && updatedProfile.data && updatedProfile.data.user) {
+        setAvatar(updatedProfile.data.user.avatar);
+        setAvatarPreview(updatedProfile.data.user.avatar || defaultAvatar);
+      } else {
+        console.error("Failed to get updated profile");
+      }
       setIsEditing(false);
+      success();
     } catch (error) {
+      error();
       console.error("Profile update or avatar upload failed:", error);
     }
   };
+
 
   return (
     <>

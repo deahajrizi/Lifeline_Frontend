@@ -1,5 +1,4 @@
 import "./login.css";
-
 import Header from "../../components/Header/Header";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
@@ -7,6 +6,7 @@ import { useUserStore } from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 import { alwaysScrollToTop } from "../../utils/functions";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +16,7 @@ export default function Login() {
   const { setCredentials, userInfo } = useAuthStore();
 
   const navigate = useNavigate();
+  const notify = () => toast.success("Logged in successfully!");
 
   useEffect(() => {
     alwaysScrollToTop()
@@ -39,6 +40,7 @@ export default function Login() {
       setCredentials({ user });
       navigate("/");
     }
+    notify()
   };
 
   return (

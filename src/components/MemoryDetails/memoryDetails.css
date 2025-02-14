@@ -30,7 +30,16 @@
 .mediaContainer img {
   height: 100%;
 }
-
+.postMediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.postMediaVideo {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
 .topText {
   width: 100%;
   display: flex;
@@ -80,6 +89,10 @@
 }
 .commentsContainer {
   width: 100%;
+  height: 250px;
+  overflow: scroll;
+  border-top: 1px solid #d6d6d6;
+  overflow-x: hidden;
 }
 .singleComment {
   width: 90%;
@@ -137,6 +150,71 @@
 }
 
 .editMemoryButton:hover {
+    cursor: pointer;
+    background-color: white;
+    color: #445961;
+}
+.commentInput{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    position: sticky;
+}
+.commentInput textarea {
+    width: 100%;
+    height: 70px;
+    border: 1px solid #d6d6d6;
+    border-radius: 20px;
+    padding: 15px 10px;
+    font-size: 14px;
+    color: #445961;
+    font-family: "Manrope", sans-serif;
+    resize: none;
+    text-align: start;
+}
+.commentButton{
+    padding: 10px 20px;
+    margin: 0 0 0 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    z-index: 16;
+    background-color: #D9C39F;
+    font-weight: 600;
+    font-family: "Manrope", sans-serif;
+    border-radius: 50px;
+    border: solid 2px #D9C39F;
+    color: white;
+    transition: 250ms ease-in-out;
+}
+.commentButton:hover{
+  cursor: pointer;
+  box-shadow: 0px 0px 50px #e3c189;
+}
+.noCommentsText{
+    font-family: "Manrope", sans-serif;
+    font-size: 16px;
+    color: #445961;
+    text-align: center;
+    margin: 50px 0;
+}
+.editCommentButton{
+    height: 30px;
+    margin-left: 5px;
+    padding: 2px 15px;
+    border: none;
+    font-size: 12px;
+    z-index: 16;
+    border: 1px solid #445961;
+    background-color: #445961;
+    font-weight: 600;
+    border-radius: 50px;
+    color: white;
+    transition: 250ms ease-in-out;
+}
+.editCommentButton:hover{
     cursor: pointer;
     background-color: white;
     color: #445961;

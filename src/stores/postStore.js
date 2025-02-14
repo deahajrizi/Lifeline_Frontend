@@ -25,39 +25,37 @@ export const usePostStore = create((set) => ({
           },
         }
       );
-      set({
+
+      const createdPost = response.data; // Récupération des données du post créé
+
+      set((state) => ({
         loading: false,
-        message: response.data.message || "Post created successfully!",
+        message: createdPost.message || "Post created successfully!",
         success: true,
-      });
+        posts: [...state.posts, createdPost], // Ajout du post à la liste
+      }));
+
+      return createdPost; // 🔴 AJOUT : on retourne le post créé
     } catch (error) {
       set({
         loading: false,
         error: error.response?.data?.message || "An error occurred",
         success: false,
       });
+
+      return null; // 🔴 AJOUT : retourne `null` en cas d'erreur
     }
   },
 
-  uploadPostMedia: (_id, formData) => {
+  uploadPostMedia: (id, formData) => {
     axios
-      .put(
-        `http://localhost:8080/api/post/upload-post-media/${_id}`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .put(`http://localhost:8080/api/post/upload-post-media/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      })
       .then((response) => {
-        set((state) => ({
-          posts: state.posts.map((post) =>
-            post.id === id
-              ? { ...post, media: response.data.postMediaUrl }
-              : post
-          ),
+        set(() => ({
+          post: response.data.post,
           loading: false,
           success: true,
         }));

@@ -1,8 +1,11 @@
 import { usePostStore } from "../../stores/postStore";
 import "./DeleteMemory.css";
+import { toast } from "react-toastify";
 
 export default function DeleteMemory({ postId, setShowDeleteMemory, setShowEditMemory }) {
   const { deletePost, getPosts} = usePostStore();
+  const success = () => toast.success("Memory deleted successfully!");
+
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -10,6 +13,7 @@ export default function DeleteMemory({ postId, setShowDeleteMemory, setShowEditM
     setShowDeleteMemory(false);
     setShowEditMemory(false);
     getPosts();
+    success();
   };
   const handleClose = () => {
     setShowDeleteMemory(false);

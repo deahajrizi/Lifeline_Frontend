@@ -6,6 +6,7 @@ import { useUserStore } from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 import { alwaysScrollToTop } from "../../utils/functions";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Register() {
 
@@ -19,6 +20,7 @@ export default function Register() {
    const { setCredentials, userInfo } = useAuthStore();
 
    const navigate = useNavigate();
+   const notify = () => toast.success("Registered successfully!");
 
    useEffect(() => {
     alwaysScrollToTop()
@@ -56,6 +58,7 @@ export default function Register() {
      } catch (e) {
        console.log(e);
      }
+      notify();
    };
 
   return (

@@ -6,6 +6,10 @@ import EditMemory from "../EditMemory/EditMemory";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import "./timeline.css";
 import { useEffect, useState } from "react";
+import fakeImage1 from "../../assets/fake-image1.jpeg";
+import fakeImage2 from "../../assets/fake-image-2.jpeg";
+import fakeImage3 from "../../assets/fake-image-3.jpeg";
+
 
 export default function Timeline({friendId}) {
   const [showDetails, setShowDetails] = useState(false); // Memory Details Modal
@@ -15,17 +19,24 @@ export default function Timeline({friendId}) {
   const { userInfo } = useAuthStore();
   // Fake posts to display when the user isn't logged in
   const fakePosts = [
-    {_id: 1,title: "First Memory", content: "fake content here", date: "01.01.2021",media: "fake-image1.jpg",},
-    {_id: 2,title: "Second Memory", content: "fake content here", date: "04.01.2020",media: "fake-image2.jpg",},
-    {_id: 3,title: "Third Memory", content: "fake content here", date: "02.22.2020",media: "fake-image3.jpg", },
+    {_id: 1,title: "First Memory", content: "Lalalala", date: "01.01.2021",media: fakeImage1},
+    {_id: 2,title: "Second Memory", content: "Beeeep", date: "04.01.2020",media: fakeImage2},
+    {_id: 3,title: "Third Memory", content: "Boooop", date: "02.22.2020",media: fakeImage3 },
   ];
+  const filteredPosts = friendId 
+  ? posts.filter(post => post.author === friendId) // Show only friend's posts
+  : posts.filter(post => post.author === userInfo.user._id); // Show only your own posts
+
 
   useEffect(() => {
     if (userInfo) {
-      if(friendId){
+      usePostStore.setState({ posts: [] }); // Clear posts immediately
+      if (friendId) {
+        // Fetch posts for the friend only
         getPosts(friendId);
       } else {
-      getPosts();
+        // Fetch posts for the logged-in user only (Jamie in your case)
+        getPosts(userInfo._id);
       }
     }
   }, [getPosts, friendId, userInfo]);
@@ -34,7 +45,6 @@ export default function Timeline({friendId}) {
     if (userInfo) {
       const fetchedPost = await getSinglePost(post._id);
       setSelectedPost(fetchedPost);
-      setSelectedPost(post);
       setShowDetails(true);
     } 
   };
@@ -48,47 +58,39 @@ export default function Timeline({friendId}) {
     <>
       <div className="timelineContainer">
         {showDetails && selectedPost && (
-          <MemoryDetails post={selectedPost} friendId={friendId} setShowDetails={setShowDetails} handleEdit={handleEdit}/>
+          <MemoryDetails
+            post={selectedPost}
+            friendId={friendId || null}
+            setShowDetails={setShowDetails}
+            handleEdit={handleEdit}
+          />
         )}
-         {showEditMemory && selectedPost && (
-          <EditMemory postId={selectedPost._id} setShowEditMemory={setShowEditMemory} />
+        {showEditMemory && selectedPost && (
+          <EditMemory
+            postId={selectedPost._id}
+            setShowEditMemory={setShowEditMemory}
+          />
         )}
 
         {/* Left Memory Container */}
         <div className="leftMemoryContainer">
           {loading ? (
-            <p>Loading posts...</p>
-          ) : error ? (
-            <p>Error: {error}</p>
-          ) : userInfo ? (
-            // If user is logged in, show their posts
-            posts.map((post, index) => {
-              if (index % 2 === 0) {
-                return (
-                  <Memory
-                    key={post._id}
-                    post={post}
-                    className="leftMemory"
-                    onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
-                  />
-                );
-              }
-              return null; // Do not render anything for right-side posts here
-            })
+            <p className="postMessage">Loading posts...</p>
+          ) : error || filteredPosts.length === 0 ? (
+            <p className="postMessage">No posts found.</p>
           ) : (
-            // If user is not logged in, show fake posts
-            fakePosts.map((post, index) => {
+            filteredPosts.map((post, index) => {
               if (index % 2 === 0) {
                 return (
                   <Memory
                     key={post._id}
                     post={post}
                     className="leftMemory"
-                    onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
+                    onClick={() => handleShowDetails(post)}
                   />
                 );
               }
-              return null; // Do not render anything for right-side posts here
+              return null;
             })
           )}
         </div>
@@ -98,40 +100,27 @@ export default function Timeline({friendId}) {
 
         {/* Right Memory Container */}
         <div className="rightMemoryContainer">
-          {userInfo
-            ? // If user is logged in, show their posts
-              posts.map((post, index) => {
-                if (index % 2 !== 0) {
-                  return (
-                    <Memory
-                      key={post._id}
-                      post={post}
-                      className="rightMemory"
-                      onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
-                      
-                    />
-                  );
-                }
-                return null; // Do not render anything for left-side posts here
-              })
-            : // If user is not logged in, show fake posts
-              fakePosts.map((post, index) => {
-                if (index % 2 !== 0) {
-                  return (
-                    <Memory
-                      key={post._id}
-                      post={post}
-                      className="rightMemory"
-                      onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
-                
-                    />
-                  );
-                }
-                return null; // Do not render anything for left-side posts here
-              })}
+          {loading ? (
+            <p className="postMessage">Loading posts...</p>
+          ) : error || filteredPosts.length === 0 ? (
+            <p className="postMessage">No posts found.</p>
+          ) : (
+            filteredPosts.map((post, index) => {
+              if (index % 2 !== 0) {
+                return (
+                  <Memory
+                    key={post._id}
+                    post={post}
+                    className="rightMemory"
+                    onClick={() => handleShowDetails(post)} // Toggle Memory Details modal
+                  />
+                );
+              }
+              return null; // Do not render anything for left-side posts here
+            })
+          )}
         </div>
       </div>
-   
     </>
   );
 }

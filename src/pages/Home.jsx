@@ -15,7 +15,7 @@ export default function Home() {
     }
     
   }, [userInfo, user]);
-  console.log(userInfo);
+
   return (
     <div>
       {userInfo ? (

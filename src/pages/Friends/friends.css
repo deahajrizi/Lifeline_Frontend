@@ -52,6 +52,7 @@
 }
 .friendsList{
     width: 70%;
+    min-height: 150px;
     padding: 30px;
     background-color: white;
     display: flex;

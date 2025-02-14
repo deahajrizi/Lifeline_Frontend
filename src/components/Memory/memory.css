@@ -5,9 +5,10 @@
   transition: 250ms ease-in-out;
 }
 .memoryContainer:hover {
-  transform: scale(1.03);  
+  transform: scale(1.03);
   cursor: pointer;
 }
+
 .memoryTitle {
   width: 100%;
   height: 50px;
@@ -29,6 +30,25 @@
   overflow: hidden;
   box-shadow: 0px 0px 30px rgb(187, 187, 187);
 }
+.mediaContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+}
+.postMediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.postMediaVideoMemory {
+  width: 100%;
+  background-color: white;
+}
+.memoryMedia p {
+  font-size: 25px;
+  color: #334e58;
+}
 .memoryMedia img {
   height: 100%;
 }
@@ -41,4 +61,3 @@
   justify-content: center;
   color: #334e58;
 }
-
