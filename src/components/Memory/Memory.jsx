@@ -1,8 +1,5 @@
 import "./memory.css"
-
 import { formatDate } from "../../utils/functions";
-
-
 
 export default function Memory({className,post, onClick}) {
   

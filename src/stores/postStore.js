@@ -2,7 +2,6 @@ import { create } from "zustand";
 import axios from "axios";
 import { useAuthStore } from "./authStore";
 
- 
 export const usePostStore = create((set) => ({
   loading: false,
   message: null,
@@ -13,7 +12,7 @@ export const usePostStore = create((set) => ({
   createPost: async (data) => {
     set({ loading: true, message: null, error: null, success: false });
 
-    const authToken = localStorage.getItem("token"); // Assuming you store auth token here
+    const authToken = localStorage.getItem("token")
 
     try {
       const response = await axios.post(
@@ -26,16 +25,16 @@ export const usePostStore = create((set) => ({
         }
       );
 
-      const createdPost = response.data; // Récupération des données du post créé
+      const createdPost = response.data
 
       set((state) => ({
         loading: false,
         message: createdPost.message || "Post created successfully!",
         success: true,
-        posts: [...state.posts, createdPost], // Ajout du post à la liste
+        posts: [...state.posts, createdPost],
       }));
 
-      return createdPost; // 🔴 AJOUT : on retourne le post créé
+      return createdPost
     } catch (error) {
       set({
         loading: false,
@@ -43,28 +42,34 @@ export const usePostStore = create((set) => ({
         success: false,
       });
 
-      return null; // 🔴 AJOUT : retourne `null` en cas d'erreur
+      return null
     }
   },
 
-  uploadPostMedia: (id, formData) => {
-    axios
-      .put(`http://localhost:8080/api/post/upload-post-media/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      })
-      .then((response) => {
-        set(() => ({
-          post: response.data.post,
-          loading: false,
-          success: true,
-        }));
-        const { setCredentials } = useAuthStore.getState();
-        setCredentials(response.data);
-      })
-      .catch((error) => {
-        set({ error: error.message, loading: false });
-      });
+  uploadPostMedia: async (id, formData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/post/upload-post-media/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+      set((state) => ({
+        posts: state.posts.map((post) =>
+          post._id === id ? response.data.post : post
+        ),
+        loading: false,
+        success: true,
+      }));
+      const { setCredentials } = useAuthStore.getState();
+      setCredentials(response.data);
+      return response.data.post;
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
   },
   getPosts: async (friendId = null) => {
     set({ loading: true, error: null });
@@ -84,7 +89,7 @@ export const usePostStore = create((set) => ({
       });
     } catch (error) {
       set({
-        error: error.message,
+        error: error.response?.data?.message || "An error occurred",
         loading: false,
       });
     }
@@ -128,13 +133,11 @@ export const usePostStore = create((set) => ({
           },
         }
       );
-
       set({
         loading: false,
         message: response.data.message || "Post updated successfully",
         success: true,
       });
-
       return response.data;
     } catch (error) {
       set({

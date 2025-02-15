@@ -12,7 +12,7 @@ export default function Profile() {
   const { userInfo } = useAuthStore();
   const { getUserProfile, user, editProfile, uploadAvatar } = useUserStore();
   const success = () => toast.success("Profile updated successfully!");
-  const error = () => toast.error("Profile update failed!");
+  const Error = () => toast.error("Profile update failed!");
 
   const [isEditing, setIsEditing] = useState(false);
   const [avatar, setAvatar] = useState(null);
@@ -51,31 +51,29 @@ export default function Profile() {
   }, [user]);
 
   const handleEditClick = (e) => {
-    e.preventDefault();
-    setIsEditing(true);
+    e.preventDefault()
+    setIsEditing(true)
   };
   const handleAvatarChange = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    console.log(file); // Debug: Check if the file is selected correctly
-
+    e.preventDefault()
+    const file = e.target.files[0]
     if (file) {
-      setAvatar(file);
+      setAvatar(file)
       //temporary url to display it in the preview
-      const fileUrl = URL.createObjectURL(file);
-      setAvatarPreview(fileUrl);
+      const fileUrl = URL.createObjectURL(file)
+      setAvatarPreview(fileUrl)
     }
   };
 
   const handleSaveProfile = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const userData = {
       username: username,
       first_name: firstName,
       last_name: lastName,
       email: email,
-    };
+    }
 
     try {
       // Update user profile
@@ -90,23 +88,20 @@ export default function Profile() {
 
       // Fetch updated profile to reflect changes
       const updatedProfile = await getUserProfile(userInfo._id);
-      console.log("Updated Profile:", updatedProfile); // Debugging: Check the updated profile
 
       // Ensure `user` is not undefined before trying to access `avatar`
       if (updatedProfile && updatedProfile.data && updatedProfile.data.user) {
         setAvatar(updatedProfile.data.user.avatar);
         setAvatarPreview(updatedProfile.data.user.avatar || defaultAvatar);
       } else {
-        console.error("Failed to get updated profile");
       }
       setIsEditing(false);
       success();
     } catch (error) {
-      error();
+      Error();
       console.error("Profile update or avatar upload failed:", error);
     }
   };
-
 
   return (
     <>
@@ -238,16 +233,6 @@ export default function Profile() {
               <p>{email}</p>
             </div>
           )}
-
-          {/* <label htmlFor="password" className="label">
-            Password
-          </label>
-          <input
-            className="input"
-            name="password"
-            type="password"
-            placeholder="••••••••••••••••"
-          ></input> --> */}
           {isEditing ? (
             <button className="formButton" type="submit">
               Save Profile

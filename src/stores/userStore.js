@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import axios from 'axios'
 import { useAuthStore } from './authStore'
 
-
 export const useUserStore = create((set) => ({
 
   user: null,
@@ -26,10 +25,10 @@ export const useUserStore = create((set) => ({
       }));
 
       // Sync with authStore
-      const { setCredentials } = useAuthStore.getState(); // Access authStore methods
-      setCredentials(response.data); // Update userInfo in authStore
+      const { setCredentials } = useAuthStore.getState()
+      setCredentials(response.data)
     } catch (error) {
-      set({ error: error.message, userLoading: false });
+      set({ error: error.message, userLoading: false })
     }
   },
 
@@ -61,10 +60,10 @@ export const useUserStore = create((set) => ({
       });
 
       // Clear credentials in authStore
-      const { setCredentials } = useAuthStore.getState();
-      setCredentials(null); // Clear user info in authStore after logout
+      const { setCredentials } = useAuthStore.getState()
+      setCredentials(null)
     } catch (error) {
-      set({ error: error.message, userLoading: false });
+      set({ error: error.message, userLoading: false })
     }
   },
 
@@ -75,10 +74,8 @@ export const useUserStore = create((set) => ({
         `http://localhost:8080/api/user/profile/${_id}`,
         { withCredentials: true }
       );
-      console.log("API response for updated profile:", response); // Debugging: Check the response
-
       set({
-        user: response.data.user, // Make sure you're setting the user correctly
+        user: response.data.user,
         loading: false,
         success: true,
       });
@@ -86,10 +83,10 @@ export const useUserStore = create((set) => ({
       const { setCredentials } = useAuthStore.getState();
       setCredentials(response.data);
 
-      return response; // Return response to be used in the component
+      return response
     } catch (error) {
       set({ error: error.message, loading: false });
-      throw error; // Throw error for the component to handle
+      throw error;
     }
   },
 
@@ -101,12 +98,12 @@ export const useUserStore = create((set) => ({
       })
       .then((response) => {
         set(() => ({
-          user: response.data.user, // Ensure this includes the updated avatar
+          user: response.data.user,
           loading: false,
           success: true,
         }));
         const { setCredentials } = useAuthStore.getState();
-        setCredentials(response.data); // Sync authStore with the updated user
+        setCredentials(response.data)
       })
       .catch((error) => {
         set({ error: error.message, loading: false });
@@ -124,12 +121,10 @@ export const useUserStore = create((set) => ({
         }));
         // Sync user info with authStore
         const { setCredentials } = useAuthStore.getState();
-        setCredentials(response.data); // Update userInfo in authStore
-        console.log("Profile updated:", response.data); // Debugging line
+        setCredentials(response.data); 
       })
       .catch((error) => {
         set({ error: error.message });
-        console.error("Error updating profile:", error); // Debugging line
       });
   },
   getFriendsProfiles: async () => {
@@ -143,10 +138,9 @@ export const useUserStore = create((set) => ({
         loading: false,
         success: true,
       }));
-      console.log("Friends profiles:", response.data.friends); // Debugging line
     } catch (error) {
       set({ error: error.response?.data?.message || "Failed to get friends" });
-      console.error("Error getting friends:", error); // Debugging line
+      console.error("Error getting friends:", error)
     }
   },
   addFriend: async (username) => {
@@ -164,16 +158,13 @@ export const useUserStore = create((set) => ({
       // Sync with authStore
       const { setCredentials } = useAuthStore.getState();
       setCredentials({ ...state.user, friends: response.data.friends });
-
   
     } catch (error) {
       set({
         loading: false,
         error: error.response?.data?.message || "Failed to add friend",
-        success: false, // Ensure success is false
+        success: false, 
       });
-     
-   
     }
   },
 }));

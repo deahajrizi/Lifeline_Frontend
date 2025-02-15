@@ -5,8 +5,7 @@ import { toast } from "react-toastify";
 export default function DeleteMemory({ postId, setShowDeleteMemory, setShowEditMemory }) {
   const { deletePost, getPosts} = usePostStore();
   const success = () => toast.success("Memory deleted successfully!");
-
-
+  
   const handleDelete = async (e) => {
     e.preventDefault();
     await deletePost(postId);

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import axios from "axios";
-import { useAuthStore } from "./authStore";
 
 export const useCommentStore = create((set) => ({
   loading: false,
@@ -12,7 +11,7 @@ export const useCommentStore = create((set) => ({
   createComment: async (data) => {
     set({ loading: true, message: null, error: null, success: false });
 
-    const authToken = localStorage.getItem("token"); // Assuming you store auth token here
+    const authToken = localStorage.getItem("token");
 
     try {
       const response = await axios.post(

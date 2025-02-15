@@ -127,7 +127,7 @@ export default function MemoryDetails({ post, setShowDetails, handleEdit, friend
                   comments?.map((comment) => (
                     <div className="singleComment" key={comment._id}>
                       <div className="commentAuthorAvatar">
-                        <img src={bgImg} alt="avatar" />
+                        <img src={comment.author.avatar} alt=" user avatar" />
                       </div>
                       <div className="commentInfo">
                         <div className="commentAuthorName">

@@ -24,7 +24,6 @@ export default function Navigation() {
       notify();
     }
 
-
   // Nav color change on scroll
   const [bgColor, setBgColor] = useState(false)
   const changeBgColor = () => {
@@ -66,5 +65,4 @@ export default function Navigation() {
       )}
     </nav>
   );
-   
 }

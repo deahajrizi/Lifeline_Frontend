@@ -2,69 +2,76 @@ import { IoMdClose } from "react-icons/io";
 import "./createMemory.css";
 import { useState } from "react";
 import { usePostStore } from "../../stores/postStore";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-export default function CreateMemory({onClose}) {
-  const { createPost, getPosts, uploadPostMedia } = usePostStore();
+export default function CreateMemory({ onClose }) {
+  const { createPost, uploadPostMedia, getPosts } = usePostStore();
 
   const [mediaPreview, setMediaPreview] = useState(null);
   const [mediaType, setMediaType] = useState("");
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("")
-  const [date, setDate] = useState("")
-  const [selectedFile, setSelectedFile] = useState(null)
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [date, setDate] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Notification messages
   const success = () => toast.success("Memory created successfully!");
-  const error = () => toast.error("Failed to create memory");
+  const Error = () => toast.error("Failed to create memory");
 
+  // Function to handle the media change
+  const onMediaChange = (event) => {
+    // Check if a file was selected
+    if (event.target.files && event.target.files[0]) {
+      // Get the file and create a URL for preview
+      const file = event.target.files[0];
+      const fileURL = URL.createObjectURL(file);
 
-   const onMediaChange = (event) => {
-     if (event.target.files && event.target.files[0]) {
-       const file = event.target.files[0];
-       const fileURL = URL.createObjectURL(file);
-
-       if (file.type.startsWith("image/")) {
-         setMediaType("image");
-       } else if (file.type.startsWith("video/")) {
-         setMediaType("video");
-       }
-       setMediaPreview(fileURL);
-       setSelectedFile(file);
-     }
-   };
-
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      try {
-        // Step 1: Create the post without media
-        const newPost = await createPost({ title, content, date });
-
-        console.log("Response from createPost:", newPost); // Debugging
-
-        // Vérifie si newPost est valide
-        if (!newPost || !newPost._id) {
-          throw new Error("Invalid response from createPost");
-        }
-
-        // Step 2: Get the post ID from the response
-        const postId = newPost._id; // Assure-toi que le backend retourne bien _id
-
-        // Step 3: Upload the media using the post ID
-        if (selectedFile) {
-          const formData = new FormData();
-          formData.append("media", selectedFile);
-          await uploadPostMedia(postId, formData);
-        }
-
-        // Close the modal after successful creation
-        onClose();
-        success();
-      } catch (error) {
-        error();
-        console.error("Failed to create post or upload media:", error);
+      // Check if the file is an image or video
+      if (file.type.startsWith("image/")) {
+        setMediaType("image");
+      } else if (file.type.startsWith("video/")) {
+        setMediaType("video");
       }
-    };
+      // Set the preview and selected file
+      setMediaPreview(fileURL);
+      setSelectedFile(file);
+    }
+  };
 
+  // Function to handle the form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Create the post without media
+      const newPost = await createPost({ title, content, date });
 
+      // Check if newPost is valid
+      if (!newPost || !newPost._id) {
+        throw new Error("Invalid response from createPost.");
+      }
+      // Get the post ID
+      const postId = newPost._id
+
+      // Upload the media using the post ID
+      if (selectedFile) {
+        // Create a FormData object and append the media file for Cloudinary
+        const formData = new FormData();
+        formData.append("media", selectedFile);
+        await uploadPostMedia(postId, formData);
+      }
+
+      // Fetch the updated posts after media upload
+      await getPosts();
+
+      // Close the modal after successful creation
+      onClose();
+      success();
+    } catch (error) {
+      Error();
+      setErrorMsg("Failed to create post or upload media.");
+    }
+  };
 
   return (
     <div className="backgroundBlur">
@@ -78,6 +85,7 @@ export default function CreateMemory({onClose}) {
         <div className="createTitleContainer">
           <h2>New Memory</h2>
           <p>Post a new memory on your timeline here.</p>
+          {errorMsg && <p className="errorMsg">{errorMsg}</p>}
         </div>
         <form onSubmit={handleSubmit} className="createMemoryForm">
           <div className="createLeft">
